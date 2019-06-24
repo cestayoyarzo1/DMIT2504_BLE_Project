@@ -11,6 +11,7 @@ void MotionControl::Init(TIM_TypeDef* _rightTimer, TIM_TypeDef* _leftTimer)
 {
   rightTimer = _rightTimer;
   leftTimer = _leftTimer;
+  state = RobotState::Idle;
 }
 //------------------------------------------------------------------------------
 void MotionControl::SetDutyCycle(uint16_t _duty)
@@ -85,6 +86,71 @@ void MotionControl::TurnLeft(uint16_t _duty)
   SetDutyCycle(_duty);  
   rightTimer->CCR3 = duty;
   leftTimer->CCR4 = duty; 
+}
+//------------------------------------------------------------------------------
+void MotionControl::Run()
+{
+    if(!timer.isRunning())
+    {
+      timer.Start();
+    }
+    else
+    {
+      if(timer.Read()>=10000)
+      {
+        timer.StopAndReset();
+        toggleState = true;
+      }
+    }
+  
+  switch(state)
+  {
+    case Idle:
+      if(toggleState)
+      {
+        Forward(250);
+        toggleState = false;
+        state = MovingForward;
+      }
+      break;
+
+    case MovingForward:
+      if(toggleState)
+      {
+        Reverse(500);
+        toggleState = false;
+        state = MovingBackwards;
+      }
+      break;
+      
+    case MovingBackwards:
+      if(toggleState)
+      {
+        TurnRight(750);
+        toggleState = false;
+        state = TurningRight;
+      }
+      break;
+      
+    case TurningRight:
+      if(toggleState)
+      {
+        TurnLeft(250);
+        toggleState = false;
+        state = TurningLeft;
+      }      
+      break;
+
+    case TurningLeft:
+      if(toggleState)
+      {
+        Stop();
+        toggleState = false;
+        state = Idle;
+      }       
+      break;    
+  
+  }
 }
 //------------------------------------------------------------------------------
 

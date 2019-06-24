@@ -106,6 +106,11 @@ void HAL::Clock()
   RCC->APB1ENR1 |= RCC_APB1ENR1_USART2EN; // Enable UART 2
   RCC->APB1ENR1 |= RCC_APB1ENR1_USART3EN; // Enable UART 3
   
+  RCC->APB1ENR1 |= RCC_APB1ENR1_TIM3EN; // Enable TIMER 3
+  RCC->APB1ENR1 |= RCC_APB1ENR1_TIM4EN; // Enable TIMER 4
+  
+  
+  
   /*
   GPIOC->MODER &= ~GPIO_MODER_MODER0;
   GPIOC->MODER |= GPIO_MODER_MODER0_0;
@@ -177,20 +182,20 @@ void HAL::Timers()
   //PC8->TIM3_CH3 (AF2) -> FORWARD
   GPIOC->MODER &= ~GPIO_MODER_MODER8;           // Clear MODER settings
   GPIOC->MODER |= GPIO_MODER_MODER8_1;          //Alternate function
-  GPIOC->AFR[1] |= 2<<8;                        //AF2
+  GPIOC->AFR[1] |= 2<<0;                        //AF2
   
   //PC9->TIM3_CH4 (AF2) -> BACKWARD
   GPIOC->MODER &= ~GPIO_MODER_MODER9;           // Clear MODER settings
   GPIOC->MODER |= GPIO_MODER_MODER9_1;          //Alternate function
-  GPIOC->AFR[1] |= 2<<8;                        //AF2
+  GPIOC->AFR[1] |= 2<<4;                        //AF2
   
   //Timer Configuration
   
   TIM3->CR1 &= ~TIM_CR1_CEN;            // Stop Timer
-  TIM3->PSC = 24-1;                     // Prescale clock to 2Mhz freq.
+  TIM3->PSC = 40-1;                     // Prescale clock to 2Mhz freq.
   TIM3->ARR = 1000;                     // PWM frequency 2Mhz / 1000 (period) = 2Khz
-  TIM3->CCR3 = 0;                       // 50% Duty cycle, pwm off.
-  TIM3->CCR4 = 0;                       // 50% Duty cycle, pwm off.
+  TIM3->CCR3 = 250;                       // 50% Duty cycle, pwm off.
+  TIM3->CCR4 = 250;                       // 50% Duty cycle, pwm off.
   TIM3->CCMR2 |= TIM_CCMR2_OC3M_2 | TIM_CCMR2_OC3M_1; //PWM type 1 CH3 (not inverted)
   TIM3->CCMR2 |= TIM_CCMR2_OC4M_2 | TIM_CCMR2_OC4M_1; //PWM type 1 CH4 (not inverted)
   TIM3->CCMR2 |= TIM_CCMR2_OC3PE;      //Enable preload for channel 3
@@ -208,20 +213,20 @@ void HAL::Timers()
   //PB8->TIM4_CH3 (AF2) -> FORWARD
   GPIOB->MODER &= ~GPIO_MODER_MODER8;           // Clear MODER settings
   GPIOB->MODER |= GPIO_MODER_MODER8_1;          //Alternate function
-  GPIOB->AFR[1] |= 2<<8;                        //AF2
+  GPIOB->AFR[1] |= 2<<0;                        //AF2
  
   //PB9->TIM4_CH4 (AF2) -> BACKWARD
   GPIOB->MODER &= ~GPIO_MODER_MODER9;           // Clear MODER settings
   GPIOB->MODER |= GPIO_MODER_MODER9_1;          //Alternate function
-  GPIOB->AFR[1] |= 2<<8;                        //AF2 
+  GPIOB->AFR[1] |= 2<<4;                        //AF2 
   
   //Timer Configuration
   
   TIM4->CR1 &= ~TIM_CR1_CEN;            // Stop Timer
-  TIM4->PSC = 24-1;                     // Prescale clock to 2Mhz freq.
+  TIM4->PSC = 40-1;                     // Prescale clock to 2Mhz freq.
   TIM4->ARR = 1000;                     // PWM frequency 2Mhz / 1000 (period) = 2Khz
-  TIM4->CCR3 = 0;                       // 50% Duty cycle, pwm off.
-  TIM4->CCR4 = 0;                       // 50% Duty cycle, pwm off.
+  TIM4->CCR3 = 500;                       // 50% Duty cycle, pwm off.
+  TIM4->CCR4 = 500;                       // 50% Duty cycle, pwm off.
   TIM4->CCMR2 |= TIM_CCMR2_OC3M_2 | TIM_CCMR2_OC3M_1; //PWM type 1 CH3 (not inverted)
   TIM4->CCMR2 |= TIM_CCMR2_OC4M_2 | TIM_CCMR2_OC4M_1; //PWM type 1 CH4 (not inverted)
   TIM4->CCMR2 |= TIM_CCMR2_OC3PE;      //Enable preload for channel 3
@@ -230,6 +235,9 @@ void HAL::Timers()
   TIM4->CCER |= TIM_CCER_CC3E;         //Enable pwm output 1
   TIM4->CCER |= TIM_CCER_CC4E;         //Enable pwm output 2
   TIM4->BDTR |= TIM_BDTR_MOE;          //Main output enable  
+  
+  TIM4->EGR |= TIM_EGR_UG;            // Enable register update
+  TIM4->CR1 |= TIM_CR1_CEN;            // Start timer  
   
 }
 //------------------------------------------------------------------------SysClk

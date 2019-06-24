@@ -18,7 +18,7 @@ void SysL476xx::Init()
   buttonEx.Init(&button,false);
   led.InitAsOutput(GPIOA,5,false);
   ledEx.Init(&led,false);
-  ledEx.SetPattern(LedPattern::On);
+  ledEx.SetPattern(LedPattern::Toggle_500ms);
   wifiBuffer.Init(wifiRawBuffer,COM_RX_BUFFER_SIZE);
   
   wifiRxBuffer.Init(wifiRawRxBuffer,COM_RX_BUFFER_SIZE);
@@ -47,6 +47,9 @@ void SysL476xx::Init()
   comHandler.Add(&debugUart);
   comHandler.Init(this,true);
   paceTimer.Start();
+  
+  robot.Init(TIM3, TIM4);
+  
 }
 //------------------------------------------------------------------------------
 void SysL476xx::Run()
@@ -58,6 +61,7 @@ void SysL476xx::Run()
       ledEx.FSM();
       comHandler.FSM(1); 
       timeHandler.FSM(1);
+      robot.Run();
       
       switch(buttonEx.FSM())
       {

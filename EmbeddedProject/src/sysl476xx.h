@@ -71,6 +71,10 @@ public:
   STM32Rtc rtc;
   TimeHandler timeHandler;
   uint32_t time;
+  
+  MotionControl robot;
+  
+  
 protected:  
   BufferHandler wifiBuffer;
   uint8_t wifiRawBuffer[COM_RX_BUFFER_SIZE];

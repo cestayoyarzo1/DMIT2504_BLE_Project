@@ -19,13 +19,25 @@ public:
   void TurnLeft(uint16_t _duty);
   void TurnRight();
   void TurnRight(uint16_t _duty);
-
+  void Run();
     
 private:
    TIM_TypeDef* rightTimer;
    TIM_TypeDef* leftTimer;
    uint16_t duty;
-    
+   Stopwatch timer;
+   bool toggleState;
+   
+   enum RobotState
+   {
+    Idle,
+    MovingForward,
+    MovingBackwards,
+    TurningRight,
+    TurningLeft,
+   } ;   
+   
+   RobotState state;
 };
               
              
