@@ -13,7 +13,7 @@ void SPIPort::Init(SPI_TypeDef* spi_)
 {
   spi = spi_;
   dr = (uint8_t*)&spi->DR;
-  SetClock(SpiClk::fclk_16);
+  //SetClock(SpiClk::fclk_16);
 }
 //------------------------------------------------------------------------------
 void SPIPort::WriteByte(uint8_t byte)

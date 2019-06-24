@@ -7,6 +7,8 @@
 
 #include <global_constants.h>
 #include <x_system.h>
+#include <spidevice.h>
+#include <spiport.h>
 
 class Process
 {
@@ -73,7 +75,9 @@ public:
   uint32_t time;
   
   MotionControl robot;
-  
+  SPIPort btSpi; 
+  SPIDevice leBluetooth;
+  GPIO btCs;
   
 protected:  
   BufferHandler wifiBuffer;

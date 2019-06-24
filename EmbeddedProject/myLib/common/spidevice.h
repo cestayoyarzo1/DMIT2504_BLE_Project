@@ -7,6 +7,8 @@
 #define SPIDEVICE_H
 
 #include <x_spiport.h>
+#include <x_gpio.h>
+#include <global_constants.h>
 
 //---------------------------------------------------------------------SPIDevice
 class SPIDevice

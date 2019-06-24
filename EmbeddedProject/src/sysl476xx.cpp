@@ -50,6 +50,10 @@ void SysL476xx::Init()
   
   robot.Init(TIM3, TIM4);
   
+  btSpi.Init(SPI1);
+  btCs.InitAsOutput(GPIOA,1, true);
+  leBluetooth.Init(&btSpi, &btCs, SpiClk::f_625K); 
+  
 }
 //------------------------------------------------------------------------------
 void SysL476xx::Run()

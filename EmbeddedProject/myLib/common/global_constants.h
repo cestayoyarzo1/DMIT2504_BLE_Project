@@ -5,6 +5,8 @@
 #define CALLBACK_BUFFER_SIZE 32
 #define UID_LEN 24
 
+//-NOTE, frequencies valid only for STM32 @ fpclk = 80Mhz;
+
 class SpiClk
 {
 public:

@@ -4,8 +4,8 @@
 */
 
 #include <hal.h>
-
 #include <spidevice.h>
+
 
 void SPIDevice::Init(x_SPIPort* spi_, x_GPIO* cs_, SpiClk::Value clock_)
 {

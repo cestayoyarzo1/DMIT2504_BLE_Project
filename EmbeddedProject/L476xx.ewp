@@ -2248,6 +2248,9 @@
         <name>$PROJ_DIR$\src\motionControl.h</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\myLib\common\spbtle.cpp</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\src\sysl476xx.cpp</name>
     </file>
     <file>

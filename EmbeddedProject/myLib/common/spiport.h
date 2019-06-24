@@ -4,13 +4,13 @@
  *  Created on: June 24th, 2019
  *      Author: Carlos Estay
  */
-//-NOTE, frequencies valid only for STM32 @ fpclk = 80Mhz;
 
 #ifndef SPIPORT_H_
 #define SPIPORT_H_
 
 #include <x_spiport.h>
-
+#include "x_gpio.h"
+   
 class SPIPort : public x_SPIPort
 {
 public:
