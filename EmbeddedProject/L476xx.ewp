@@ -2159,6 +2159,18 @@
                 <name>$PROJ_DIR$\myLib\common\httpparser.cpp</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\myLib\common\spidevice.cpp</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\myLib\common\spidevice.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\myLib\common\spiport.cpp</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\myLib\common\spiport.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\myLib\common\stopwatch.cpp</name>
             </file>
             <file>
@@ -2205,6 +2217,12 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\myLib\interfaces\x_rtc.cpp</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\myLib\interfaces\x_spiport.cpp</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\myLib\interfaces\x_spiport.h</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\myLib\interfaces\x_system.cpp</name>

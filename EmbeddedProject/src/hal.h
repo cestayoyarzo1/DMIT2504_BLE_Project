@@ -50,6 +50,7 @@ protected:
   static void Uart();
   static void I2c();
   static void Timers();
+  static void SPI();
 private:
 };
 

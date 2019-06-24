@@ -20,11 +20,10 @@ void HAL::Init(void* sys)
     
     Clock();
     Uart();
-    //SPI();
+    SPI();
     //I2c();
     Timers();
     sysPtr = (SysL476xx*)sys;
-    
     
     __enable_irq(); 
     sysPtr->Init();
@@ -174,6 +173,41 @@ void HAL::I2c()
   
   I2C1->CR1 |= I2C_CR1_PE;                      // Enable peripheral
 }
+//--------------------------------------------------------------------------SPI
+void HAL::SPI()
+{
+  //PB3 as SPI1_CLK
+  GPIOB->MODER &= ~GPIO_MODER_MODER3;           // Clear MODER settings
+  GPIOB->MODER |= GPIO_MODER_MODER3_1;          //Alternate function
+  GPIOB->AFR[0] |= 5<<12;                       //AF5
+  
+  //PA6 as SPI1_MISO
+  GPIOA->MODER &= ~GPIO_MODER_MODER6;           // Clear MODER settings
+  GPIOA->MODER |= GPIO_MODER_MODER6_1;          //Alternate function
+  GPIOA->AFR[0] |= 5<<24;                      //AF5
+  
+  //PA7 as SPI1_MOSI
+  GPIOA->MODER &= ~GPIO_MODER_MODER7;           // Clear MODER settings
+  GPIOA->MODER |= GPIO_MODER_MODER7_1;          //Alternate function
+  GPIOA->AFR[0] |= 5<<28;                      //AF5  
+  
+  SPI1->CR1 |= SPI_CR1_SSM;                  // Software NSS Management enabled
+  SPI1->CR1 |= SPI_CR1_SSI;                  // Soft NSS Hi
+  SPI1->CR1 |= SPI_CR1_MSTR;                 // Master mode
+  SPI1->CR2 |= SPI_CR2_FRXTH;                // Fifo rx threshold 8 bit
+  //SPI1->CR1 |= SPI_CR1_CPHA; // Second clock transition captures
+  SPI1->CRCPR = 10;
+  SPI1->CR1 &= ~(7<<3);                         //Clear clock
+  //SPI1->CR1 |= SpiClk::f_165K5<<3;              //Set clock
+  SPI1->CR1 |= SPI_CR1_SPE;                     // Enable SPI1  
+  
+  
+  
+  
+}
+
+
+
 //------------------------------------------------------------------------Timers
 void HAL::Timers()
 {
@@ -283,21 +317,21 @@ void HAL::SwitchU2Tx(ConnectionSource::Value source)
 void HAL::Uart()
 {
   //UART3
-  // TX
-  GPIOC->MODER &= ~GPIO_MODER_MODER4;  //Clear MODER
-  GPIOC->MODER |= GPIO_MODER_MODER4_1; //Set alternate function
-  GPIOC->AFR[0] |= 7<<16;              //Set alternate function 7 (UART)
-  
-  // RX
-  GPIOC->MODER &= ~GPIO_MODER_MODER5;  //Clear MODER
-  GPIOC->MODER |= GPIO_MODER_MODER5_1; //Set alternate function
-  GPIOC->AFR[0] |= 7<<20;               //Set alternate function 7 (UART)
-  
-  //Important!!! no floating inputs TX  pull high and RX pull low
-  GPIOC->PUPDR |= GPIO_PUPDR_PUPDR4_0 | GPIO_PUPDR_PUPDR5_1;
-  
-  NVIC_EnableIRQ(USART3_IRQn); // CM4 Intrinsic
-  USART3->CR1 |= USART_CR1_RXNEIE;
+//  // TX
+//  GPIOC->MODER &= ~GPIO_MODER_MODER4;  //Clear MODER
+//  GPIOC->MODER |= GPIO_MODER_MODER4_1; //Set alternate function
+//  GPIOC->AFR[0] |= 7<<16;              //Set alternate function 7 (UART)
+//  
+//  // RX
+//  GPIOC->MODER &= ~GPIO_MODER_MODER5;  //Clear MODER
+//  GPIOC->MODER |= GPIO_MODER_MODER5_1; //Set alternate function
+//  GPIOC->AFR[0] |= 7<<20;               //Set alternate function 7 (UART)
+//  
+//  //Important!!! no floating inputs TX  pull high and RX pull low
+//  GPIOC->PUPDR |= GPIO_PUPDR_PUPDR4_0 | GPIO_PUPDR_PUPDR5_1;
+//  
+//  NVIC_EnableIRQ(USART3_IRQn); // CM4 Intrinsic
+//  USART3->CR1 |= USART_CR1_RXNEIE;
   
   //UART2
   // TX
@@ -318,20 +352,20 @@ void HAL::Uart()
   
   //UART1
   // TX
-  GPIOA->MODER &= ~GPIO_MODER_MODER9;  //Clear MODER
-  GPIOA->MODER |= GPIO_MODER_MODER9_1; //Set alternate function
-  GPIOA->AFR[1] |= 7<<4;               //Set alternate function 7 (UART)
-  
-  // RX
-  GPIOA->MODER &= ~GPIO_MODER_MODER10;  //Clear MODER
-  GPIOA->MODER |= GPIO_MODER_MODER10_1; //Set alternate function
-  GPIOA->AFR[1] |= 7<<8;               //Set alternate function 7 (UART)
-  
-  //Important!!! no floating inputs TX  pull high and RX pull low
-  GPIOA->PUPDR |= GPIO_PUPDR_PUPDR9_0 | GPIO_PUPDR_PUPDR10_1;
-  
-  NVIC_EnableIRQ(USART1_IRQn); // CM4 Intrinsic
-  USART1->CR1 |= USART_CR1_RXNEIE;
+//  GPIOA->MODER &= ~GPIO_MODER_MODER9;  //Clear MODER
+//  GPIOA->MODER |= GPIO_MODER_MODER9_1; //Set alternate function
+//  GPIOA->AFR[1] |= 7<<4;               //Set alternate function 7 (UART)
+//  
+//  // RX
+//  GPIOA->MODER &= ~GPIO_MODER_MODER10;  //Clear MODER
+//  GPIOA->MODER |= GPIO_MODER_MODER10_1; //Set alternate function
+//  GPIOA->AFR[1] |= 7<<8;               //Set alternate function 7 (UART)
+//  
+//  //Important!!! no floating inputs TX  pull high and RX pull low
+//  GPIOA->PUPDR |= GPIO_PUPDR_PUPDR9_0 | GPIO_PUPDR_PUPDR10_1;
+//  
+//  NVIC_EnableIRQ(USART1_IRQn); // CM4 Intrinsic
+//  USART1->CR1 |= USART_CR1_RXNEIE;
 }
 //-----------------------------------------------------------------------UartISR
 void HAL::UartISR(uint8_t idx)

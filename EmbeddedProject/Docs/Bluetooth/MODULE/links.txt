@@ -1,0 +1,7 @@
+DEV BOARD
+https://www.st.com/content/st_com/en/products/ecosystems/stm32-open-development-environment/stm32-nucleo-expansion-boards/stm32-ode-connect-hw/x-nucleo-idb05a1.html#overview
+
+
+MODULE
+https://www.st.com/content/st_com/en/products/wireless-transceivers-mcus-and-modules/bluetooth-bluetooth-low-energy/spbtle-rf.html#resource
+

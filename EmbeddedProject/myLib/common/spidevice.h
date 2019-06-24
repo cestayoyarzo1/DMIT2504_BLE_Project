@@ -6,6 +6,8 @@
 #ifndef SPIDEVICE_H
 #define SPIDEVICE_H
 
+#include <x_spiport.h>
+
 //---------------------------------------------------------------------SPIDevice
 class SPIDevice
 {
