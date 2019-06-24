@@ -1,12 +1,11 @@
 #ifndef MOTIONCONTROL_H
 #define MOTIONCONTROL_H
 
-
+#define SWITCH_TIMER 2000
 
 class MotionControl
 {
   
-
 public:
   void Init(TIM_TypeDef* _rightTimer, TIM_TypeDef* _leftTimer);
   void SetDutyCycle(uint16_t  _duty);

@@ -96,7 +96,7 @@ void MotionControl::Run()
     }
     else
     {
-      if(timer.Read()>=10000)
+      if(timer.Read()>=SWITCH_TIMER)
       {
         timer.StopAndReset();
         toggleState = true;
@@ -108,7 +108,7 @@ void MotionControl::Run()
     case Idle:
       if(toggleState)
       {
-        Forward(250);
+        Forward(500);
         toggleState = false;
         state = MovingForward;
       }
@@ -126,7 +126,7 @@ void MotionControl::Run()
     case MovingBackwards:
       if(toggleState)
       {
-        TurnRight(750);
+        TurnRight(250);
         toggleState = false;
         state = TurningRight;
       }
