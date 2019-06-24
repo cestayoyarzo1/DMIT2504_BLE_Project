@@ -18,6 +18,7 @@
 #include <httpparser.h>
 #include <stm32rtc.h>
 #include <timehandler.h>
+#include <motionControl.h>
 #include <sysl476xx.h>
 
 class ConnectionSource // For UART2 which is connected to STLink & MAX322
@@ -43,11 +44,12 @@ public:
   static uint32_t CRC32(void* data, uint32_t len, uint32_t firstcrc);
   static void UartISR(uint8_t idx);
   static void Debug(const char* format, ...);
-  
+
 protected:
   static void Clock();
   static void Uart();
   static void I2c();
+  static void Timers();
 private:
 };
 
