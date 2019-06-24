@@ -10,14 +10,14 @@ class SpiClk
 public:
   enum Value
   {
-    fclk_2,
-    fclk_4,
-    fclk_8,
-    fclk_16,
-    fclk_32,
-    fclk_64,
-    fclk_128,
-    fclk_256,
+    f_40M,
+    f_20M,
+    f_10M,
+    f_5M,
+    f_2M5,
+    f_1M25,
+    f_625K,
+    f_312K5,
   };
 };
 

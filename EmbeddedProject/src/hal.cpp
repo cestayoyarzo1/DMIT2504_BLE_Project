@@ -198,14 +198,10 @@ void HAL::SPI()
   //SPI1->CR1 |= SPI_CR1_CPHA; // Second clock transition captures
   SPI1->CRCPR = 10;
   SPI1->CR1 &= ~(7<<3);                         //Clear clock
-  //SPI1->CR1 |= SpiClk::f_165K5<<3;              //Set clock
+  SPI1->CR1 |= SpiClk::f_625K<<3;              //Set clock
   SPI1->CR1 |= SPI_CR1_SPE;                     // Enable SPI1  
   
-  
-  
-  
 }
-
 
 
 //------------------------------------------------------------------------Timers

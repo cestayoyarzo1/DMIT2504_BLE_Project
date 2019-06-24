@@ -1,9 +1,10 @@
 /*
  * spiport.h
  *
- *  Created on: Sep 16, 2016
- *      Author: E1216431
+ *  Created on: June 24th, 2019
+ *      Author: Carlos Estay
  */
+//-NOTE, frequencies valid only for STM32 @ fpclk = 80Mhz;
 
 #ifndef SPIPORT_H_
 #define SPIPORT_H_
