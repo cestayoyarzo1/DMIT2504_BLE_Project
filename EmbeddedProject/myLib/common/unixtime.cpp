@@ -1,0 +1,254 @@
+/*
+  FILE: unixtime.cpp
+  Created on: 8/16/2017, by Tom Diaz
+*/
+
+#include <unixtime.h>
+
+/* 2000-03-01 (mod 400 year, immediately after feb29 */
+#define LEAPOCH (946684800LL + 86400*(31+29))
+
+#define DAYS_PER_400Y (365*400 + 97)
+#define DAYS_PER_100Y (365*100 + 24)
+#define DAYS_PER_4Y   (365*4   + 1)
+
+//------------------------------------------------------------------------------
+/*uint32_t UnixTime::ConvertTo(const DateTime *dateTime) 
+{
+  // Calculating the number of seconds to the begining of the same year
+  uint32_t secondsFromYearStart = 0;
+  secondsFromYearStart += dateTime->Minute * SecondsInMinute;
+  secondsFromYearStart += dateTime->Second;
+  secondsFromYearStart += dateTime->Hour * SecondsInHour;
+  
+  // Subtracting one to account for the fact that there is no day 0
+  secondsFromYearStart += (dateTime->Day - 1) * SecondsInDay;
+  
+  // checking if the current year is a leap year
+  bool isCurrentLeapYear = isLeapYear(dateTime->Year);
+  
+  for (uint8_t i = 1; i < dateTime->Month; i++)
+  {
+    secondsFromYearStart += daysInMonth(i, isCurrentLeapYear) * SecondsInDay;
+  }
+  
+  uint32_t secondsFromOrigin = 0;
+  // Calculating the number of seconds from 1970/1/1 till the current year
+  for (uint16_t i = 1970; i < dateTime->Year; i++)
+  {
+    secondsFromOrigin += isLeapYear(i) == true ? SecondsInLeapYear : SecondsInNonLeapYear;
+  }
+  
+  secondsFromOrigin += secondsFromYearStart;
+  
+  return secondsFromOrigin;
+}*/
+
+uint32_t UnixTime::ConvertTo(const DateTime *dateTime) 
+{
+  // Calculating the number of seconds to the begining of the same year
+  
+  uint32_t secondsFromYearStart = 0;
+  secondsFromYearStart += dateTime->Minute * SecondsInMinute;
+  secondsFromYearStart += dateTime->Second;
+  secondsFromYearStart += dateTime->Hour * SecondsInHour;
+  // Subtracting one to account for the fact that there is no day 0
+  secondsFromYearStart += (dateTime->Day - 1) * SecondsInDay;
+  
+  // checking if the current year is a leap year
+  bool isCurrentLeapYear = isLeapYear(dateTime->Year);
+  
+  for (uint8_t i = 1; i < dateTime->Month; i++)
+  {
+    secondsFromYearStart += daysInMonth(i, isCurrentLeapYear) * SecondsInDay;
+  }
+  
+  uint32_t secondsFromOrigin = 0;
+  // Calculating the number of seconds from 1970/1/1 till the current year
+  for (uint16_t i = 1970; i < dateTime->Year; i++)
+  {
+    secondsFromOrigin += isLeapYear(i) == true ? SecondsInLeapYear : SecondsInNonLeapYear;
+  }
+  secondsFromOrigin += secondsFromYearStart;
+  return secondsFromOrigin;
+}
+//------------------------------------------------------------------------------
+/*
+DateTime UnixTime::dateTime;
+DateTime* UnixTime::ConvertFrom(uint32_t uTimestamp) 
+{
+  //DateTime dateTime;
+  // Unix timespamp / hours. Ignoring the decimal part will give the year 
+  uint16_t yearSinceEpoch = uTimestamp / HoursInYear;
+  
+  //uint16_t numberOfLeapYears = (yearSinceEpoch + 1970 - 1969) / 4;
+  
+  // Converting this year begining to the unix time, so it could be subtructed from the 
+  // epoch time to find out how many seconds passed since the begining of the year
+  dateTime.Year = 1970 + yearSinceEpoch;
+  dateTime.Month = 1;
+  dateTime.Day = 1;
+  dateTime.Hour = 0;
+  dateTime.Minute = 0;
+  dateTime.Second = 0;
+  
+  // Finding out how many seconds has passed since the year started
+  uint32_t secondsSinceBeginingOfTheYear = uTimestamp - ConvertTo(&dateTime);
+  // How many Days passed since the begining of the year.
+  uint32_t daysSinceBeginingOfTheYear = (secondsSinceBeginingOfTheYear) / SecondsInDay;
+  
+  bool isCurrentLeapYear = isLeapYear(dateTime.Year);
+  
+  // Since the daysSinceBeginingOfTheYear is rounded to the nearest integer one day must be added
+  // as the daysSinceBeginingOfTheYear = how many full days passed since the begining of the year, not 
+  // including the hours, minutes, and seconds.
+  
+  dateTime.Month = GetMonthByDay(daysSinceBeginingOfTheYear + 1, isCurrentLeapYear);
+  dateTime.Day = GetMonthDayByYearDay(daysSinceBeginingOfTheYear + 1, isCurrentLeapYear);
+  dateTime.Year = yearSinceEpoch + 1970;
+  
+  
+  // Find out how many seconds passed since the beginng of the day
+  // Calculated diffirence is how much seconds passed since the day began
+  uint32_t secondsSinceTheDayStarted = secondsSinceBeginingOfTheYear - daysSinceBeginingOfTheYear * SecondsInDay;
+  
+  dateTime.Hour = secondsSinceTheDayStarted / SecondsInHour;
+  uint16_t secondsSinceTheHourStarted = secondsSinceTheDayStarted - dateTime.Hour* SecondsInHour;
+  dateTime.Minute = secondsSinceTheHourStarted / SecondsInMinute;
+  uint8_t secondsSinceMinuteStarted = secondsSinceTheHourStarted - dateTime.Minute * SecondsInMinute;
+  dateTime.Second = secondsSinceMinuteStarted;
+  
+  return &dateTime;
+}
+*/
+DateTime UnixTime::tm;
+DateTime* UnixTime::ConvertFrom(uint32_t t/*, DateTime *tm*/) 
+{
+	long long days, secs;
+	int remdays, remsecs, remyears;
+	int qc_cycles, c_cycles, q_cycles;
+	int years, months;
+	int wday, yday, leap;
+	static const char days_in_month[] = { 31,30,31,30,31,31,30,31,30,31,31,29 };
+
+	secs = t - LEAPOCH;
+	days = secs / 86400;
+	remsecs = secs % 86400;
+	if (remsecs < 0) {
+		remsecs += 86400;
+		days--;
+	}
+
+	wday = (3 + days) % 7;
+	if (wday < 0) wday += 7;
+
+	qc_cycles = days / DAYS_PER_400Y;
+	remdays = days % DAYS_PER_400Y;
+	if (remdays < 0) {
+		remdays += DAYS_PER_400Y;
+		qc_cycles--;
+	}
+
+	c_cycles = remdays / DAYS_PER_100Y;
+	if (c_cycles == 4) c_cycles--;
+	remdays -= c_cycles * DAYS_PER_100Y;
+
+	q_cycles = remdays / DAYS_PER_4Y;
+	if (q_cycles == 25) q_cycles--;
+	remdays -= q_cycles * DAYS_PER_4Y;
+
+	remyears = remdays / 365;
+	if (remyears == 4) remyears--;
+	remdays -= remyears * 365;
+
+	leap = !remyears && (q_cycles || !c_cycles);
+	yday = remdays + 31 + 28 + leap;
+	if (yday >= 365 + leap) yday -= 365 + leap;
+
+	years = remyears + 4 * q_cycles + 100 * c_cycles + 400 * qc_cycles;
+
+	for (months = 0; days_in_month[months] <= remdays; months++)
+		remdays -= days_in_month[months];
+
+	
+	tm.Year = years + 2000;
+	tm.Month = months + 2;
+	if (tm.Month >= 12) {
+		tm.Month -= 12;
+		tm.Year++;
+	}
+	tm.Day = remdays + 1;
+
+	tm.Hour = remsecs / 3600;
+	tm.Minute = remsecs / 60 % 60;
+	tm.Second = remsecs % 60;
+
+	tm.Month++;
+        
+        return &tm;
+}
+//------------------------------------------------------------------------------
+uint8_t UnixTime::GetMonthByDay(uint16_t daynum, bool isLeapYear) 
+{	
+  uint16_t currentDay = 0;
+  for (int month = 1; month <= 12; month++) 
+  {
+    currentDay += daysInMonth(month, isLeapYear);
+    if (currentDay >= daynum)
+      return month;
+  }
+  return -1;
+};
+
+uint8_t UnixTime::GetMonthDayByYearDay(uint16_t yearDay, bool isLeapYear) 
+{
+  // Determain the number of days right before the begining of the month
+  int16_t currentDay = 0;
+  for (int month = 1; month < GetMonthByDay(yearDay, isLeapYear); month++) 
+  {
+    currentDay += daysInMonth(month, isLeapYear);
+  } // the diffirence will be the day number in a month
+  return yearDay - (currentDay);
+};
+
+uint16_t UnixTime::GetDayNumFromYearStart(uint8_t day, uint8_t month, bool isLeapYear) 
+{
+  uint8_t currentDayCount = 0;
+  // itterating through months to add all the days before the last month
+  for (int i = 1; i < month; i++) {
+    currentDayCount += daysInMonth(i, isLeapYear);
+  }
+  // Adding the days to all the previous months
+  return currentDayCount + day;
+}
+
+//
+//How to determine whether a year is a leap year
+//
+//To determine whether a year is a leap year, follow these steps :
+//1. If the year is evenly divisible by 4, go to step 2. Otherwise, go to step 5.
+//2. If the year is evenly divisible by 100, go to step 3. Otherwise, go to step 4.
+//3. If the year is evenly divisible by 400, go to step 4. Otherwise, go to step 5.
+//4. The year is a leap year(it has 366 days).
+//5. The year is not a leap year(it has 365 days).
+bool UnixTime::isLeapYear(uint16_t year) 
+{
+  bool case1 = year % 4 == 0;
+  bool case2 = year % 100 == 0;
+  bool case3 = year % 400 == 0;
+  return (case1 && !case2) || (case1 && case2 && case3);
+}
+
+uint8_t UnixTime::daysInMonth(uint8_t month, bool isLeapYear) 
+{
+  if (month < 1 || month > 12)
+    return -1;
+  if (month == 2 && isLeapYear)
+    return 29;
+  if (month == 2 && !isLeapYear)
+    return 28;
+  if (month < 8)
+    return month % 2 == 0 ? 30 : 31;
+  else
+    return month % 2 == 0 ? 31 : 30;
+}
