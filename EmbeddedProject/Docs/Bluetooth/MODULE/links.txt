@@ -5,3 +5,9 @@ https://www.st.com/content/st_com/en/products/ecosystems/stm32-open-development-
 MODULE
 https://www.st.com/content/st_com/en/products/wireless-transceivers-mcus-and-modules/bluetooth-bluetooth-low-energy/spbtle-rf.html#resource
 
+
+REPOSITORY(does not work)
+https://github.com/STMicroelectronics/BlueSTSDK_Android
+
+APP google play
+https://play.google.com/store/apps/details?id=com.st.blunrg
