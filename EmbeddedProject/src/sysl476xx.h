@@ -78,6 +78,7 @@ public:
   SPIPort btSpi; 
   SPIDevice leBluetooth;
   GPIO btCs;
+  Stopwatch serialTimer;
   
 protected:  
   BufferHandler wifiBuffer;

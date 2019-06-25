@@ -21,20 +21,20 @@ void SysL476xx::Init()
   ledEx.SetPattern(LedPattern::Toggle_500ms);
   wifiBuffer.Init(wifiRawBuffer,COM_RX_BUFFER_SIZE);
   
-  wifiRxBuffer.Init(wifiRawRxBuffer,COM_RX_BUFFER_SIZE);
-  wifiTxBuffer.Init(wifiRawTxBuffer,COM_TX_BUFFER_SIZE);
-  uart1.Init(COMId::COM_1,BaudRate::B_115200,&wifiRxBuffer,&wifiTxBuffer,false);
-  uart1.SetCommandMode(CommandMode::Timeout);
+//  wifiRxBuffer.Init(wifiRawRxBuffer,COM_RX_BUFFER_SIZE);
+//  wifiTxBuffer.Init(wifiRawTxBuffer,COM_TX_BUFFER_SIZE);
+//  uart1.Init(COMId::COM_1,BaudRate::B_115200,&wifiRxBuffer,&wifiTxBuffer,false);
+//  uart1.SetCommandMode(CommandMode::Timeout);
   
   commRxBuffer.Init(commRawRxBuffer,COM_RX_BUFFER_SIZE);
   commTxBuffer.Init(commRawTxBuffer,COM_TX_BUFFER_SIZE);
   uart2.Init(COMId::COM_2,BaudRate::B_115200,&commRxBuffer,&commTxBuffer,false);
   uart2.SetCommandMode(CommandMode::Timeout);
   
-  debugRxBuffer.Init(debugRawRxBuffer,COM_RX_BUFFER_SIZE);
-  debugTxBuffer.Init(debugRawTxBuffer,COM_TX_BUFFER_SIZE);
-  debugUart.Init(COMId::COM_3,BaudRate::B_115200,&debugRxBuffer,&debugTxBuffer,false);
-  debugUart.SetCommandMode(CommandMode::Timeout);
+//  debugRxBuffer.Init(debugRawRxBuffer,COM_RX_BUFFER_SIZE);
+//  debugTxBuffer.Init(debugRawTxBuffer,COM_TX_BUFFER_SIZE);
+//  debugUart.Init(COMId::COM_3,BaudRate::B_115200,&debugRxBuffer,&debugTxBuffer,false);
+//  debugUart.SetCommandMode(CommandMode::Timeout);
   
   rtc.Init(RTC,PWR);
   timeHandler.Init(this,true);
@@ -42,9 +42,9 @@ void SysL476xx::Init()
   timeHandler.SetDestination(&time);
   rtc.x_RTC::Sync(946684800);
   
-  comHandler.Add(&uart1);
+  //comHandler.Add(&uart1);
   comHandler.Add(&uart2);
-  comHandler.Add(&debugUart);
+  //comHandler.Add(&debugUart);
   comHandler.Init(this,true);
   paceTimer.Start();
   
@@ -60,6 +60,20 @@ void SysL476xx::Run()
 {
   for(;EVER;)
   {
+    
+    if(!serialTimer.isRunning())
+    {
+      serialTimer.Start();
+      uart2.WriteString("Hello Carlos\n\r");
+    }
+    else
+    {
+      if(serialTimer.Read() >3000)
+      {
+        serialTimer.StopAndReset();
+      }
+    }
+    
     if(paceTimer.Read()>=1)
     {
       ledEx.FSM();
