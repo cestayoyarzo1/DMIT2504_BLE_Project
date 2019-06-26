@@ -26,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     TextView statusTextView;
+    ListView devicesListView;
+    LeDeviceListAdapter deviceListAdapter;
 
     public static final String APP_NAME = "Robot Control by Carlos Estay";
 
@@ -65,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
         statusTextView.setText("");
 
         getSupportActionBar().setTitle(APP_NAME);
+
+        devicesListView = findViewById(R.id.activity_main_devices_listview);
+        deviceListAdapter = new LeDeviceListAdapter(this);
+        devicesListView.setAdapter(deviceListAdapter);
 
 
         //setContentView(R.layout.activity_device_scan);
@@ -144,11 +151,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Scanning
-    public void onScanPress(View view)
-    {
-        scanLeDevice(true);
-//        Intent intent = new Intent(this, RemoteControlActivity.class);
-//        startActivity(intent);
+    public void onScanPress(View view) {
+        if(!mScanning) {
+            scanLeDevice(true);
+        }
     }
 
     @TargetApi(21)
@@ -184,7 +190,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
-            Toast.makeText(getApplicationContext(), "Device Found", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Device Found", Toast.LENGTH_SHORT).show();
+            if(result.getDevice().getName() != null && !deviceListAdapter.contains(result)) {
+                deviceListAdapter.addResult(result);
+            }
         }
 
         @Override

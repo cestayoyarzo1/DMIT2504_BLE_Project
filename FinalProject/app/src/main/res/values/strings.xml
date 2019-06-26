@@ -8,4 +8,8 @@
     <string name="activity_remote_control_status_textview">Idle</string>
     <string name="activity_main_title_text">No device connected. Press button to scan a device</string>
     <string name="main_menu_control"> Control</string>
+    <string name="listview_item_name">NAME</string>
+    <string name="listview_item_address">ADDRESS</string>
+    <string name="listview_item_power">POWER</string>
+    <string name="listview_item_data">DATA</string>
 </resources>
