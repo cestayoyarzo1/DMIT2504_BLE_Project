@@ -5,4 +5,5 @@
     <string name="activity_main_status_text">status</string>
     <string name="activity_remote_control_up_button">UP</string>
     <string name="activity_remote_control_title">REMOTE CONTROL</string>
+    <string name="acivity_remote_control_status_textview">Idle</string>
 </resources>

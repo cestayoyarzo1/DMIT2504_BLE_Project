@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class RemoteControlActivity extends AppCompatActivity {
 
@@ -14,6 +15,8 @@ public class RemoteControlActivity extends AppCompatActivity {
     ImageButton reverseButton;
     ImageButton rightButton;
     ImageButton leftButton;
+
+    TextView statusTextView;
 
 
     @Override
@@ -24,6 +27,8 @@ public class RemoteControlActivity extends AppCompatActivity {
         reverseButton = findViewById(R.id.activity_remote_control_reverse_button);
         rightButton = findViewById(R.id.activity_remote_control_right_button);
         leftButton = findViewById(R.id.activity_remote_control_left_button);
+
+        statusTextView = findViewById(R.id.activity_remote_control_status_textview);
 
         forwardButton.setOnTouchListener(buttonForwardListener);
         reverseButton.setOnTouchListener(buttonReverseListener);
@@ -43,6 +48,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     forwardButton.animate().scaleY(1.1f);
                     forwardButton.setColorFilter(Color.argb(100, 0,255,0));
                     //Toast.makeText(getApplicationContext(), "Button FORWARD down", Toast.LENGTH_LONG).show();
+                    statusTextView.setText("FORWARD");
                     break;
 
                 case MotionEvent.ACTION_UP:
@@ -51,6 +57,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     forwardButton.animate().scaleY(1);
                     //forwardButton.clearAnimation();
                     forwardButton.setColorFilter(Color.alpha(0));
+                    statusTextView.setText("IDLE");
                     break;
                 }
             return false;
@@ -66,6 +73,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     reverseButton.animate().scaleY(1.1f);
                     reverseButton.setColorFilter(Color.argb(100, 0,255,0));
                     //Toast.makeText(getApplicationContext(), "Button REVERSE down", Toast.LENGTH_LONG).show();
+                    statusTextView.setText("REVERSE");
                     break;
 
                 case MotionEvent.ACTION_UP:
@@ -73,6 +81,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     reverseButton.animate().scaleY(1);
                     reverseButton.setColorFilter(Color.alpha(0));
                     //Toast.makeText(getApplicationContext(), "Button REVERSE up", Toast.LENGTH_LONG).show();
+                    statusTextView.setText("IDLE");
                     break;
             }
             return false;
@@ -88,6 +97,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     rightButton.animate().scaleY(1.1f);
                     rightButton.setColorFilter(Color.argb(100, 0,255,0));
                     //Toast.makeText(getApplicationContext(), "Button RIGHT down", Toast.LENGTH_LONG).show();
+                    statusTextView.setText("RIGHT");
                     break;
 
                 case MotionEvent.ACTION_UP:
@@ -95,6 +105,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     rightButton.animate().scaleY(1);
                     rightButton.setColorFilter(Color.alpha(0));
                     //Toast.makeText(getApplicationContext(), "Button RIGHT up", Toast.LENGTH_LONG).show();
+                    statusTextView.setText("IDLE");
                     break;
             }
             return false;
@@ -110,6 +121,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     leftButton.animate().scaleY(1.1f);
                     leftButton.setColorFilter(Color.argb(100, 0,255,0));
                     //Toast.makeText(getApplicationContext(), "Button LEFT down", Toast.LENGTH_LONG).show();
+                    statusTextView.setText("LEFT");
                     break;
 
                 case MotionEvent.ACTION_UP:
@@ -117,6 +129,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     leftButton.animate().scaleY(1);
                     leftButton.setColorFilter(Color.alpha(0));
                     //Toast.makeText(getApplicationContext(), "Button LEFT up", Toast.LENGTH_LONG).show();
+                    statusTextView.setText("IDLE");
                     break;
             }
             return false;
