@@ -3,4 +3,6 @@
     <string name="ble_not_supported">Bluetooth Low Energy not supported</string>
     <string name="activity_main_scan_button">Scan</string>
     <string name="activity_main_status_text">status</string>
+    <string name="activity_remote_control_up_button">UP</string>
+    <string name="activity_remote_control_title">REMOTE CONTROL</string>
 </resources>

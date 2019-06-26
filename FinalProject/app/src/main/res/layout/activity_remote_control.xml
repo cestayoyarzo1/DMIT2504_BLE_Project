@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/activity_remote_control_title"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintBottom_toTopOf="@+id/activity_remote_control_forward_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/activity_remote_control_forward_button"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="400dp"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/activity_remote_control_up_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/buttonup" />
+
+    <ImageButton
+        android:id="@+id/activity_remote_control_reverse_button"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="127dp"
+        android:layout_height="113dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="100dp"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/activity_remote_control_up_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_remote_control_forward_button"
+        app:srcCompat="@mipmap/buttondown" />
+
+    <ImageButton
+        android:id="@+id/activity_remote_control_left_button"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="127dp"
+        android:layout_height="113dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/activity_remote_control_up_button"
+        app:layout_constraintBottom_toTopOf="@+id/activity_remote_control_reverse_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_remote_control_forward_button"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@mipmap/buttonleft" />
+
+    <ImageButton
+        android:id="@+id/activity_remote_control_right_button"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="127dp"
+        android:layout_height="113dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/activity_remote_control_up_button"
+        app:layout_constraintBottom_toTopOf="@+id/activity_remote_control_reverse_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/activity_remote_control_left_button"
+        app:layout_constraintTop_toBottomOf="@+id/activity_remote_control_forward_button"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@mipmap/buttonright" />
+</android.support.constraint.ConstraintLayout>

@@ -105,11 +105,12 @@ public class MainActivity extends AppCompatActivity {
         scanLeDevice(true);
 
     }
-
     public void onScanPress(View view)
     {
         Toast.makeText(this, "You have pressed scan", Toast.LENGTH_SHORT).show();
         scanLeDevice(true);
+        Intent intent = new Intent(this, RemoteControlActivity.class);
+        startActivity(intent);
     }
 
     private void scanLeDevice(final boolean enable) {
