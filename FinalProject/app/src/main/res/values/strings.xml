@@ -5,5 +5,7 @@
     <string name="activity_main_status_text">status</string>
     <string name="activity_remote_control_up_button">UP</string>
     <string name="activity_remote_control_title">REMOTE CONTROL</string>
-    <string name="acivity_remote_control_status_textview">Idle</string>
+    <string name="activity_remote_control_status_textview">Idle</string>
+    <string name="activity_main_title_text">No device connected. Press button to scan a device</string>
+    <string name="main_menu_control"> Control</string>
 </resources>
