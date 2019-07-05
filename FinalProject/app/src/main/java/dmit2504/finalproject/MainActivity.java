@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattServer;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
@@ -18,6 +19,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +28,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,13 +40,11 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothManager bluetoothManager;
     private BluetoothGattServer bluetoothGattServer;
-    private BluetoothGatt bluetoothGatt;
     private boolean mScanning;
     private Handler handler;
     //private TextView bleTopText;
     //private ArrayAdapter<String> leAdapter;
     private boolean mCharacteristicWritten = true;
-    private BluetoothGattCharacteristic customCharacteristic;
 
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 20000;
@@ -60,6 +61,12 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String APP_NAME = "Robot Control by Carlos Estay";
 
+    BluetoothDevice robotDevice, connectedDevice;
+    BluetoothGatt bluetoothGatt;
+    private BluetoothGattCharacteristic customCharacteristic;
+
+    TextView directionTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         devicesListView = findViewById(R.id.activity_main_devices_listview);
         deviceListAdapter = new LeDeviceListAdapter(this);
         devicesListView.setAdapter(deviceListAdapter);
+
+        directionTextView = findViewById(R.id.activity_main_direction_input);
 
 
         //setContentView(R.layout.activity_device_scan);
@@ -117,10 +126,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
-
         //scanLeDevice(true);
-
     }
 
     //Main Menu Loading
@@ -150,12 +156,104 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //Scanning
-    public void onScanPress(View view) {
-        if(!mScanning) {
-            scanLeDevice(true);
-        }
+
+
+    private MainActivity getActivity() {
+
+        return this;
     }
+
+    //le Callback
+
+    private ScanCallback leScanCallback = new ScanCallback() {
+
+        @Override
+        public void onScanResult(int callbackType, ScanResult result) {
+            super.onScanResult(callbackType, result);
+            //Toast.makeText(getApplicationContext(), "Device Found", Toast.LENGTH_SHORT).show();
+            if (result.getDevice().getName() != null && !deviceListAdapter.contains(result)) {
+                deviceListAdapter.addResult(result);//add found device to the listview
+
+                //register event for clicking items
+                devicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        ScanResult selectedResult = (ScanResult) deviceListAdapter.getItem(position);
+                        robotDevice = selectedResult.getDevice();
+                        //Toast.makeText(getApplicationContext(), "Clicked on device:" + robotDevice.getName(), Toast.LENGTH_SHORT).show();
+                        bluetoothGatt = robotDevice.connectGatt(getActivity(), false, gattCallback);
+                        statusTextView.setText("Connecting to " + robotDevice.getName() + "...");
+
+                    }
+                });
+            }
+        }
+        @Override
+        public void onBatchScanResults(List<ScanResult> results) {
+            System.out.println("BLE// onBatchScanResults");
+            Toast.makeText(getApplicationContext(), "Devices Found", Toast.LENGTH_SHORT).show();
+            for (ScanResult sr : results) {
+                Log.i("ScanResult - Results", sr.toString());
+            }
+        }
+
+        @Override
+        public void onScanFailed(int errorCode) {
+            Toast.makeText(getApplicationContext(), "Scan Failed", Toast.LENGTH_SHORT).show();
+            System.out.println("BLE// onScanFailed");
+            Log.e("Scan Failed", "Error Code: " + errorCode);
+        }
+
+    };
+
+    //Gatt Callback
+    private final BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            //super.onConnectionStateChange(gatt, status, newState);
+            connectedDevice = gatt.getDevice();
+            switch(newState ){
+                case BluetoothProfile.STATE_CONNECTED:
+                    Snackbar.make(findViewById(android.R.id.content), "Connected to " + connectedDevice.getName(), Snackbar.LENGTH_LONG).setAction("No action", null).show();
+                    //Toast.makeText(getApplicationContext(), "Connected to " + connectedDevice.getName(), Toast.LENGTH_LONG).show();
+                    statusTextView.setText("Connected to " + connectedDevice.getName());
+                    bluetoothGatt.discoverServices();
+                    break;
+
+                case BluetoothProfile.STATE_DISCONNECTED:
+                    Snackbar.make(findViewById(android.R.id.content), "Disconnected from " + connectedDevice.getName(), Snackbar.LENGTH_LONG).setAction("No action", null).show();
+                    //Toast.makeText(getApplicationContext(), "Disconnected from " + connectedDevice.getName(), Toast.LENGTH_LONG).show();
+                    break;
+
+                    default:
+                break;
+            }
+
+
+        }
+
+        @Override
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            super.onServicesDiscovered(gatt, status);
+            Snackbar.make(findViewById(android.R.id.content), "Services discovered", Snackbar.LENGTH_LONG).setAction("No action", null).show();
+        }
+
+        @Override
+        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            super.onCharacteristicRead(gatt, characteristic, status);
+        }
+
+        @Override
+        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            super.onCharacteristicWrite(gatt, characteristic, status);
+        }
+
+        @Override
+        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+            super.onCharacteristicChanged(gatt, characteristic);
+        }
+    };
+
 
     @TargetApi(21)
     private void scanLeDevice(final boolean enable) {
@@ -183,34 +281,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //le Callback
-
-    private ScanCallback leScanCallback = new ScanCallback() {
-
-        @Override
-        public void onScanResult(int callbackType, ScanResult result) {
-            super.onScanResult(callbackType, result);
-            //Toast.makeText(getApplicationContext(), "Device Found", Toast.LENGTH_SHORT).show();
-            if(result.getDevice().getName() != null && !deviceListAdapter.contains(result)) {
-                deviceListAdapter.addResult(result);
-            }
+    //Scanning
+    public void onScanPress(View view) {
+        if(!mScanning) {
+            scanLeDevice(true);
         }
+    }
 
-        @Override
-        public void onBatchScanResults(List<ScanResult> results) {
-            System.out.println("BLE// onBatchScanResults");
-            Toast.makeText(getApplicationContext(), "Devices Found", Toast.LENGTH_SHORT).show();
-            for (ScanResult sr : results) {
-                Log.i("ScanResult - Results", sr.toString());
-            }
-        }
-
-        @Override
-        public void onScanFailed(int errorCode) {
-            Toast.makeText(getApplicationContext(), "Scan Failed", Toast.LENGTH_SHORT).show();
-            System.out.println("BLE// onScanFailed");
-            Log.e("Scan Failed", "Error Code: " + errorCode);
-        }
-    };
-
+    public void onSendDirection(View view){
+        String value = directionTextView.getText().toString();
+        Toast.makeText(this, "You are sending :" + value, Toast.LENGTH_LONG).show();
+//        customCharacteristic.setValue(value);
+//        bluetoothGatt.writeCharacteristic(customCharacteristic);
+    }
 }

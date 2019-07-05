@@ -12,4 +12,6 @@
     <string name="listview_item_address">ADDRESS</string>
     <string name="listview_item_power">POWER</string>
     <string name="listview_item_data">DATA</string>
+    <string name="activity_main_direction_text">Direction</string>
+    <string name="activity_main_send_button">SEND</string>
 </resources>

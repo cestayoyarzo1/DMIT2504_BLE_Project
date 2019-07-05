@@ -38,6 +38,8 @@ public class LeDeviceListAdapter extends BaseAdapter {
     }
 
 
+
+
     @Override
     public int getCount() {
         return mLeDeviceList.size();
