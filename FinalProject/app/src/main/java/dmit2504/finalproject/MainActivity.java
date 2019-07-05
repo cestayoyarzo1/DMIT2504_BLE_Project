@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattServer;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -16,7 +17,6 @@ import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -33,7 +33,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -234,18 +236,36 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-            super.onServicesDiscovered(gatt, status);
+            //super.onServicesDiscovered(gatt, status);
             Snackbar.make(findViewById(android.R.id.content), "Services discovered", Snackbar.LENGTH_LONG).setAction("No action", null).show();
+
+            String serviceUUID = "D973f2E0-B19E-11E2-9E96-0800200C9A66";
+            String charUUID = "D973f2E2-B19E-11E2-9E96-0800200C9A66";
+
+            List<BluetoothGattService> services = gatt.getServices();
+            BluetoothGattService service = gatt.getService(UUID.fromString(serviceUUID));
+            customCharacteristic = service.getCharacteristic(UUID.fromString(charUUID));
+//            customCharacteristic =
+//                    gatt.getService(UUID.fromString(serviceUUID))
+//                            .getCharacteristic(UUID.fromString(charUUID));
+            if (customCharacteristic == null) {
+                Snackbar.make(findViewById(android.R.id.content), "Characteristic not found", Snackbar.LENGTH_LONG).setAction("No action", null).show();
+            }
+            else{
+                Snackbar.make(findViewById(android.R.id.content), "Characteristic: " + customCharacteristic.getInstanceId(), Snackbar.LENGTH_LONG).setAction("No action", null).show();
+            }
         }
 
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             super.onCharacteristicRead(gatt, characteristic, status);
+            Snackbar.make(findViewById(android.R.id.content), "Characteristic Read", Snackbar.LENGTH_LONG).setAction("No action", null).show();
         }
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             super.onCharacteristicWrite(gatt, characteristic, status);
+            Snackbar.make(findViewById(android.R.id.content), "Characteristic Written", Snackbar.LENGTH_LONG).setAction("No action", null).show();
         }
 
         @Override
@@ -291,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
     public void onSendDirection(View view){
         String value = directionTextView.getText().toString();
         Toast.makeText(this, "You are sending :" + value, Toast.LENGTH_LONG).show();
-//        customCharacteristic.setValue(value);
-//        bluetoothGatt.writeCharacteristic(customCharacteristic);
+        customCharacteristic.setValue(value);
+        bluetoothGatt.writeCharacteristic(customCharacteristic);
     }
 }
