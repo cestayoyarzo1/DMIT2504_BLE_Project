@@ -1,0 +1,43 @@
+stm32l4xx_hal_tim.pbi: \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_tim.c \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc\stm32l4xx_hal.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../Inc\stm32l4xx_hal_conf.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc\stm32l4xx_hal_rcc.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/CMSIS/Device/ST/STM32L4xx/Include\stm32l4xx.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l476xx.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/CMSIS/Include\core_cm4.h \
+  D:\Programs\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\stdint.h \
+  D:\Programs\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\ycheck.h \
+  D:\Programs\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\yvals.h \
+  D:\Programs\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\DLib_Defaults.h \
+  D:\\Programs\\IAR\ Systems\\Embedded\ Workbench\ 8.3\\arm\\inc\\c\\DLib_Config_Full.h \
+  D:\Programs\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\DLib_Product.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/CMSIS/Include/core_cmInstr.h \
+  D:\Programs\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\cmsis_iar.h \
+  D:\Programs\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c/iccarm_builtin.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/CMSIS/Include/core_cmFunc.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/CMSIS/Include/core_cmSimd.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/CMSIS/Device/ST/STM32L4xx/Include/system_stm32l4xx.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h \
+  D:\Programs\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\stddef.h \
+  D:\Programs\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\ysizet.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc_ex.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc\stm32l4xx_hal_rcc_ex.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc\stm32l4xx_hal_exti.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc\stm32l4xx_hal_gpio.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_gpio_ex.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc\stm32l4xx_hal_dma.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc\stm32l4xx_hal_dma_ex.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc\stm32l4xx_hal_cortex.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc\stm32l4xx_hal_flash.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_flash_ex.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_flash_ramfunc.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc\stm32l4xx_hal_i2c.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_i2c_ex.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc\stm32l4xx_hal_pwr.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc\stm32l4xx_hal_spi.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi_ex.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc\stm32l4xx_hal_uart.h \
+  D:\inst\ST\STM32CubeExpansion_BLE1_V4.4.0\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h
