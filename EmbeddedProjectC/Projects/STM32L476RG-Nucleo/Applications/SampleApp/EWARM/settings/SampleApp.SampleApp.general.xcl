@@ -1,0 +1,15 @@
+"D:\Programs\IAR Systems\Embedded Workbench 8.3\arm\bin\armproc.dll" 
+
+"D:\Programs\IAR Systems\Embedded Workbench 8.3\arm\bin\armstlink2.dll" 
+
+"D:\My Documents\GitHub\DMIT2504_BLE_Project\EmbeddedProjectC\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM\SampleApp\Exe\SampleApp.out" 
+
+--plugin="D:\Programs\IAR Systems\Embedded Workbench 8.3\arm\bin\armbat.dll" 
+
+--device_macro="D:\Programs\IAR Systems\Embedded Workbench 8.3\arm\config\debugger\ST\STM32L4xx.dmac" 
+
+--flash_loader="D:\Programs\IAR Systems\Embedded Workbench 8.3\arm\config\flashloader\ST\FlashSTM32L4AxxG.board" 
+
+
+
+
