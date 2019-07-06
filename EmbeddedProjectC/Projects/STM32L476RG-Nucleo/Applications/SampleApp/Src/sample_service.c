@@ -127,11 +127,11 @@ tBleStatus Add_Sample_Service(void)
                            16, 1, &RXCharHandle);
   if (ret != BLE_STATUS_SUCCESS) goto fail;
   
-  PRINTF("Sample Service added.\nTX Char Handle %04X, RX Char Handle %04X\n", TXCharHandle, RXCharHandle);
+  PRINTF("Sample Service added.\n\rTX Char Handle %04X, RX Char Handle %04X\n\r", TXCharHandle, RXCharHandle);
   return BLE_STATUS_SUCCESS; 
   
 fail:
-  PRINTF("Error while adding Sample Service.\n");
+  PRINTF("Error while adding Sample Service.\n\r");
   return BLE_STATUS_ERROR ;
 }
 
@@ -147,7 +147,7 @@ void Make_Connection(void)
   
   if(BLE_Role == CLIENT) {
     
-    printf("Client Create Connection\n");
+    printf("Client Create Connection\n\r");
     tBDAddr bdaddr = {0xaa, 0x00, 0x00, 0xE1, 0x80, 0x02};
     
     BSP_LED_On(LED2); //To indicate the start of the connection and discovery phase
@@ -160,13 +160,13 @@ void Make_Connection(void)
                                     SUPERV_TIMEOUT, CONN_L1 , CONN_L2); 
     
     if (ret != 0){
-      printf("Error while starting connection.\n");
+      printf("Error while starting connection.\n\r");
       HAL_Delay(100);
     }
     
   } else  {
     
-    const char local_name[] = {AD_TYPE_COMPLETE_LOCAL_NAME,'B','l','u','e','N','R','G','_','C','h','a','t'};
+    const char local_name[] = {AD_TYPE_COMPLETE_LOCAL_NAME,'R','O','B','O','T'};
     
     /* disable scan response */
     hci_le_set_scan_resp_data(0,NULL);
