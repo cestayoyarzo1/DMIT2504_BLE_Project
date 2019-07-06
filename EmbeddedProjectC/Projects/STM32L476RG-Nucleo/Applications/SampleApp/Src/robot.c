@@ -6,86 +6,101 @@
 
 #include <robot.h>
 
+ TIM_TypeDef* rTimer;
+ TIM_TypeDef* lTimer;
+ int robot_duty_cycle;
+ int toggleState;
+ 
+ enum RobotState
+ {
+  Idle,
+  MovingForward,
+  MovingBackwards,
+  TurningRight,
+  TurningLeft,
+ } ;   
+ 
+ int state;
 
 void Robot_Init(TIM_TypeDef* _rightTimer, TIM_TypeDef* _leftTimer)
 {
-  rightTimer = _rightTimer;
-  leftTimer = _leftTimer;
+  rTimer = _rightTimer;
+  lTimer = _leftTimer;
   state = Idle;
 }
 //------------------------------------------------------------------------------
 void Robot_SetDutyCycle(int _duty)
 {
-   duty = _duty;
+   robot_duty_cycle = _duty;
 }
 //------------------------------------------------------------------------------
 void Robot_Stop()
 {
-  duty = 0;
-  rightTimer->CCR3 = duty;
-  rightTimer->CCR4 = duty;
-  leftTimer->CCR3 = duty;
-  leftTimer->CCR4 = duty;
+  robot_duty_cycle = 0;
+  rTimer->CCR3 = robot_duty_cycle;
+  rTimer->CCR4 = robot_duty_cycle;
+  lTimer->CCR3 = robot_duty_cycle;
+  lTimer->CCR4 = robot_duty_cycle;
 }
 //------------------------------------------------------------------------------
 void Robot_Forward()
 {
   Robot_Stop();
-  rightTimer->CCR3 = duty;
-  leftTimer->CCR3 = duty;
+  rTimer->CCR3 = robot_duty_cycle;
+  lTimer->CCR3 = robot_duty_cycle;
 }
 //------------------------------------------------------------------------------
 void Robot_ForwardSpeed(int _duty)
 {
   Robot_Stop();
   Robot_SetDutyCycle(_duty);
-  rightTimer->CCR3 = duty;
-  leftTimer->CCR3 = duty;
+  rTimer->CCR3 = robot_duty_cycle;
+  lTimer->CCR3 = robot_duty_cycle;
 }
 //------------------------------------------------------------------------------
 void Robot_Reverse()
 {
   Robot_Stop();
-  rightTimer->CCR4 = duty;
-  leftTimer->CCR4 = duty;
+  rTimer->CCR4 = robot_duty_cycle;
+  lTimer->CCR4 = robot_duty_cycle;
 }
 //------------------------------------------------------------------------------
 void Robot_ReverseSpeed(int _duty)
 {
   Robot_Stop();
   Robot_SetDutyCycle(_duty);
-  rightTimer->CCR4 = duty;
-  leftTimer->CCR4 = duty;
+  rTimer->CCR4 = robot_duty_cycle;
+  lTimer->CCR4 = robot_duty_cycle;
 }
 //------------------------------------------------------------------------------
 void Robot_TurnRight()
 {
   Robot_Stop();
-  rightTimer->CCR4 = duty;
-  leftTimer->CCR3 = duty;  
+  rTimer->CCR4 = robot_duty_cycle;
+  lTimer->CCR3 = robot_duty_cycle;  
 }
 //------------------------------------------------------------------------------
 void Robot_TurnRightSpeed(int _duty)
 {
   Robot_Stop();
   Robot_SetDutyCycle(_duty);  
-  rightTimer->CCR4 = duty;
-  leftTimer->CCR3 = duty;  
+  rTimer->CCR4 = robot_duty_cycle;
+  lTimer->CCR3 = robot_duty_cycle;  
 }
 //------------------------------------------------------------------------------
 void Robot_TurnLeft()
 {
   Robot_Stop();
-  rightTimer->CCR3 = duty;
-  leftTimer->CCR4 = duty; 
+  rTimer->CCR3 = robot_duty_cycle;
+  lTimer->CCR4 = robot_duty_cycle; 
 }
 //------------------------------------------------------------------------------
 void Robot_TurnLeftSpeed(int _duty)
 {
   Robot_Stop();
   Robot_SetDutyCycle(_duty);  
-  rightTimer->CCR3 = duty;
-  leftTimer->CCR4 = duty; 
+  rTimer->CCR3 = robot_duty_cycle;
+  lTimer->CCR4 = robot_duty_cycle;
 }
 //------------------------------------------------------------------------------
 void Robot_Run()
@@ -140,7 +155,10 @@ void Robot_Run()
   }
 }
 //------------------------------------------------------------------------------
-
+ void Robot_ParseCommand(tHciDataPacket* packet)
+ {
+    printf("\n\rReceiving Instruction");
+ }
 
 
 

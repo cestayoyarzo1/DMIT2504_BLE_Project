@@ -57,4 +57,7 @@ hci_tl.pbi: \
   D:\Programs\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\DLib_Product_string.h \
   D:\My\ Documents\GitHub\DMIT2504_BLE_Project\EmbeddedProjectC\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Middlewares/ST/BlueNRG-MS/includes/compiler.h \
   D:\My\ Documents\GitHub\DMIT2504_BLE_Project\EmbeddedProjectC\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Middlewares/ST/BlueNRG-MS/includes\hci.h \
-  D:\My\ Documents\GitHub\DMIT2504_BLE_Project\EmbeddedProjectC\Middlewares\ST\BlueNRG-MS\hci\hci_tl_patterns\Basic/hci_tl.h
+  D:\My\ Documents\GitHub\DMIT2504_BLE_Project\EmbeddedProjectC\Middlewares\ST\BlueNRG-MS\hci\hci_tl_patterns\Basic/hci_tl.h \
+  D:\My\ Documents\GitHub\DMIT2504_BLE_Project\EmbeddedProjectC\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../Inc\robot.h \
+  D:\My\ Documents\GitHub\DMIT2504_BLE_Project\EmbeddedProjectC\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/CMSIS/Device/ST/STM32L4xx/Include\stm32l476xx.h \
+  D:\Programs\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\stdio.h

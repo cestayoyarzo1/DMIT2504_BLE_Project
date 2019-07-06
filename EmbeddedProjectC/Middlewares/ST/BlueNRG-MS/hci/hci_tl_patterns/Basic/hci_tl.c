@@ -47,6 +47,7 @@
 #include "hci_const.h"
 #include "hci.h"
 #include "hci_tl.h"
+#include "robot.h"
 
 #define HCI_LOG_ON                      0
 #define HCI_PCK_TYPE_OFFSET             0
@@ -336,7 +337,8 @@ void hci_user_evt_proc(void)
     list_remove_head (&hciReadPktRxQueue, (tListNode **)&hciReadPacket);
     if (hciContext.UserEvtRx != NULL)
     {
-      hciContext.UserEvtRx(hciReadPacket->dataBuff); 
+      Robot_ParseCommand(hciReadPacket);
+      hciContext.UserEvtRx(hciReadPacket->dataBuff);     
     }
     list_insert_tail(&hciReadPktPool, (tListNode *)hciReadPacket);
   }
