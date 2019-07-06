@@ -14,9 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,6 +28,8 @@ public class RemoteControlActivity extends AppCompatActivity {
     ImageButton reverseButton;
     ImageButton rightButton;
     ImageButton leftButton;
+
+    SeekBar speedSeekBar;
 
     TextView statusTextView;
 
@@ -42,6 +46,7 @@ public class RemoteControlActivity extends AppCompatActivity {
         reverseButton = findViewById(R.id.activity_remote_control_reverse_button);
         rightButton = findViewById(R.id.activity_remote_control_right_button);
         leftButton = findViewById(R.id.activity_remote_control_left_button);
+        speedSeekBar = findViewById(R.id.activity_remote_control_bar);
 
         statusTextView = findViewById(R.id.activity_remote_control_status_textview);
 
@@ -49,6 +54,8 @@ public class RemoteControlActivity extends AppCompatActivity {
         reverseButton.setOnTouchListener(buttonReverseListener);
         rightButton.setOnTouchListener(buttonRightListener);
         leftButton.setOnTouchListener(buttonLeftListener);
+        speedSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
+        speedSeekBar.setProgress(speedSeekBar.getMax()/2);
 
         robot = getIntent().getParcelableExtra("ROBOT");
         if(robot != null){
@@ -123,7 +130,7 @@ public class RemoteControlActivity extends AppCompatActivity {
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             super.onCharacteristicWrite(gatt, characteristic, status);
-            Snackbar.make(findViewById(android.R.id.content), "Characteristic Written", Snackbar.LENGTH_LONG).setAction("No action", null).show();
+            //Snackbar.make(findViewById(android.R.id.content), "Characteristic Written", Snackbar.LENGTH_LONG).setAction("No action", null).show();
         }
 
         @Override
@@ -160,6 +167,28 @@ public class RemoteControlActivity extends AppCompatActivity {
                     break;
                 }
             return false;
+        }
+    };
+
+
+    private SeekBar.OnSeekBarChangeListener seekBarChangeListener =  new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            Toast.makeText(getApplicationContext(), "Speed: " + progress + "0%", Toast.LENGTH_SHORT).show();
+            if(robot != null){
+                customCharacteristic.setValue("@S" + String.format("%02d",progress));
+                bluetoothGatt.writeCharacteristic(customCharacteristic);
+            }
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
         }
     };
 
