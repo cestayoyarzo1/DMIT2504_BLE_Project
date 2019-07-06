@@ -20,15 +20,19 @@
   TurningLeft,
  } ;   
  
- int state;
+ uint8_t state;
  
-tHciDataPacket robotPacket;
+//tHciDataPacket robotPacket;
+
+uint8_t command[4];
+uint16_t speed;
 
 void Robot_Init(TIM_TypeDef* _rightTimer, TIM_TypeDef* _leftTimer)
 {
   rTimer = _rightTimer;
   lTimer = _leftTimer;
   state = Idle;
+  speed = 5;
 }
 //------------------------------------------------------------------------------
 void Robot_SetDutyCycle(uint16_t _duty)
@@ -162,12 +166,49 @@ void Robot_Run()
 
     if(packet->data_len == 16)
     {
-      memcpy(&robotPacket.dataBuff, packet->dataBuff, packet->data_len);
+      memcpy(command, packet->dataBuff+12, 4);
 //      for(int i=0; i<packet->data_len, i++)
 //      {
 //        robotPacket
 //      }
-      printf("\n\rReceiving Instruction: ");     
+      //printf("\n\rReceiving Instruction: ");   
+      
+      switch(command[1])
+      {
+        case 'M': //command is for moving
+          switch(command[2])
+          {
+            case 'F': //formward
+              printf("\n\rMoving Forward ");   
+              break;
+              
+            case 'B': //backwards, reverse
+              printf("\n\rMoving Reverse ");   
+              break;  
+              
+            case 'R': //right
+              printf("\n\rTurning Right ");
+              break; 
+              
+            case 'L': //left
+              printf("\n\rTurning Left ");
+              break; 
+              
+            case '0': //idle, stop
+              printf("\n\rStopping ");
+              break;               
+          }
+        break;
+        
+        case 'S': //command is for speed 
+            speed = (command[2] - 48)*100;
+            speed += (command[3] - 48)*10;
+          break;
+            
+        default:
+          break;        
+      }
+      
     }
  }
 
