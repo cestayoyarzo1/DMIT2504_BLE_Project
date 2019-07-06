@@ -140,7 +140,7 @@ void MX_BlueNRG_MS_Init(void)
   
   HAL_Delay(100);
   
-  printf("HWver %d, FWver %d\n", hwVersion, fwVersion);
+  printf("HWver %d, FWver %d\n\r", hwVersion, fwVersion);
   
   if (hwVersion > 0x30) { /* X-NUCLEO-IDB05A1 expansion board is used */
     bnrg_expansion_board = IDB05A1; 
@@ -161,7 +161,7 @@ void MX_BlueNRG_MS_Init(void)
   
   ret = aci_gatt_init();    
   if (ret) {
-    printf("GATT_Init failed.\n");
+    printf("GATT_Init failed.\n\r");
   }
   
   if (BLE_Role == SERVER) {
@@ -182,7 +182,7 @@ void MX_BlueNRG_MS_Init(void)
   }
   
   if (ret != BLE_STATUS_SUCCESS) {
-    printf("GAP_Init failed.\n");
+    printf("GAP_Init failed.\n\r");
   }
     
   ret = aci_gap_set_auth_requirement(MITM_PROTECTION_REQUIRED,
@@ -194,20 +194,20 @@ void MX_BlueNRG_MS_Init(void)
                                      123456,
                                      BONDING);
   if (ret == BLE_STATUS_SUCCESS) {
-    printf("BLE Stack Initialized.\n");
+    printf("BLE Stack Initialized.\n\r");
   }
   
   if (BLE_Role == SERVER) {
-    printf("SERVER: BLE Stack Initialized\n");
+    printf("SERVER: BLE Stack Initialized\n\r");
     ret = Add_Sample_Service();
     
     if (ret == BLE_STATUS_SUCCESS)
-      printf("Service added successfully.\n");
+      printf("Service added successfully.\n\r");
     else
-      printf("Error while adding service.\n");
+      printf("Error while adding service.\n\r");
     
   } else {
-    printf("CLIENT: BLE Stack Initialized\n");
+    printf("CLIENT: BLE Stack Initialized\n\r");
   }
   
   /* Set output power level */

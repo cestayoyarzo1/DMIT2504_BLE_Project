@@ -61,7 +61,7 @@
 volatile int connected = FALSE;
 volatile uint8_t set_connectable = 1;
 volatile uint16_t connection_handle = 0;
-volatile uint8_t notification_enabled = FALSE;
+volatile uint8_t notification_enabled = TRUE;
 volatile uint8_t start_read_tx_char_handle = FALSE;
 volatile uint8_t start_read_rx_char_handle = FALSE;
 volatile uint8_t end_read_tx_char_handle = FALSE;
@@ -171,7 +171,7 @@ void Make_Connection(void)
     /* disable scan response */
     hci_le_set_scan_resp_data(0,NULL);
     
-    PRINTF("General Discoverable Mode ");
+    PRINTF("General Discoverable Mode\n\r ");
     /*
     Advertising_Event_Type, Adv_Interval_Min, Adv_Interval_Max, Address_Type, Adv_Filter_Policy,
     Local_Name_Length, Local_Name, Service_Uuid_Length, Service_Uuid_List, Slave_Conn_Interval_Min,
@@ -179,7 +179,7 @@ void Make_Connection(void)
     */
     ret = aci_gap_set_discoverable(ADV_DATA_TYPE, ADV_INTERV_MIN, ADV_INTERV_MAX, PUBLIC_ADDR, 
                                    NO_WHITE_LIST_USE, 13, local_name, 0, NULL, 0, 0);
-    PRINTF("%d\n",ret);
+    PRINTF("%d\n\r",ret);
   }
 }
 
@@ -192,7 +192,7 @@ void startReadTXCharHandle(void)
 {
   if (!start_read_tx_char_handle)
   {    
-    PRINTF("Start reading TX Char Handle\n");
+    PRINTF("Start reading TX Char Handle\n\r");
     
     const uint8_t charUuid128_TX[16] = {0x66,0x9a,0x0c,0x20,0x00,0x08,0x96,0x9e,0xe2,0x11,0x9e,0xb1,0xe1,0xf2,0x73,0xd9};
     aci_gatt_disc_charac_by_uuid(connection_handle, 0x0001, 0xFFFF, UUID_TYPE_128, charUuid128_TX);
@@ -209,7 +209,7 @@ void startReadRXCharHandle(void)
 {  
   if (!start_read_rx_char_handle)
   {
-    PRINTF("Start reading RX Char Handle\n");
+    PRINTF("Start reading RX Char Handle\n\r");
     
     const uint8_t charUuid128_RX[16] = {0x66,0x9a,0x0c,0x20,0x00,0x08,0x96,0x9e,0xe2,0x11,0x9e,0xb1,0xe2,0xf2,0x73,0xd9};
     aci_gatt_disc_charac_by_uuid(connection_handle, 0x0001, 0xFFFF, UUID_TYPE_128, charUuid128_RX);
