@@ -14,6 +14,7 @@ app_x-cube-ble1.pbi: \
   D:\Programs\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\ycheck.h \
   D:\Programs\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\yvals.h \
   D:\Programs\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\DLib_Defaults.h \
+  D:\\Programs\\IAR\ Systems\\Embedded\ Workbench\ 8.3\\arm\\inc\\c\\DLib_Config_Full.h \
   D:\Programs\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\DLib_Product.h \
   D:\My\ Documents\GitHub\DMIT2504_BLE_Project\EmbeddedProjectC\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM/../../../../../Drivers/CMSIS/Include/core_cmInstr.h \
   D:\Programs\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\cmsis_iar.h \
