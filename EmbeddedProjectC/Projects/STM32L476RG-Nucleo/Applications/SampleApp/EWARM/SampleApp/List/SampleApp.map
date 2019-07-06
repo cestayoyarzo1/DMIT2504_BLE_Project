@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ELF Linker V8.40.1.212/W32 for ARM                  05/Jul/2019  18:50:37
+# IAR ELF Linker V8.40.1.212/W32 for ARM                  06/Jul/2019  00:58:40
 # Copyright 2007-2019 IAR Systems AB.
 #
 #    Output file  =
@@ -10,7 +10,7 @@
 #        D:\My
 #        Documents\GitHub\DMIT2504_BLE_Project\EmbeddedProjectC\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM\SampleApp\List\SampleApp.map
 #    Command line =
-#        -f C:\Users\CARLOS~1\AppData\Local\Temp\EW74E4.tmp ("D:\My
+#        -f C:\Users\CARLOS~1\AppData\Local\Temp\EW2CA8.tmp ("D:\My
 #        Documents\GitHub\DMIT2504_BLE_Project\EmbeddedProjectC\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM\SampleApp\Obj\app_x-cube-ble1.o"
 #        "D:\My
 #        Documents\GitHub\DMIT2504_BLE_Project\EmbeddedProjectC\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM\SampleApp\Obj\ble_list.o"
@@ -34,6 +34,8 @@
 #        Documents\GitHub\DMIT2504_BLE_Project\EmbeddedProjectC\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM\SampleApp\Obj\hci_tl_interface.o"
 #        "D:\My
 #        Documents\GitHub\DMIT2504_BLE_Project\EmbeddedProjectC\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM\SampleApp\Obj\main.o"
+#        "D:\My
+#        Documents\GitHub\DMIT2504_BLE_Project\EmbeddedProjectC\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM\SampleApp\Obj\robot.o"
 #        "D:\My
 #        Documents\GitHub\DMIT2504_BLE_Project\EmbeddedProjectC\Projects\STM32L476RG-Nucleo\Applications\SampleApp\EWARM\SampleApp\Obj\sample_service.o"
 #        "D:\My

@@ -23,6 +23,7 @@ rule browsedata
 build app_x-cube-ble1.pbi : index app_x-cube-ble1.xcl
 build hci_tl_interface.pbi : index hci_tl_interface.xcl
 build main.pbi : index main.xcl
+build robot.pbi : index robot.xcl
 build sample_service.pbi : index sample_service.xcl
 build stm32l4xx_hal_msp.pbi : index stm32l4xx_hal_msp.xcl
 build stm32l4xx_it.pbi : index stm32l4xx_it.xcl
@@ -59,13 +60,13 @@ build bluenrg_utils_small.pbi : index bluenrg_utils_small.xcl
 build hci_le.pbi : index hci_le.xcl
 build hci_tl.pbi : index hci_tl.xcl
 build ble_list.pbi : index ble_list.xcl
-build SampleApp_part0.pbi : link app_x-cube-ble1.pbi hci_tl_interface.pbi main.pbi sample_service.pbi stm32l4xx_hal_msp.pbi stm32l4xx_it.pbi
-build SampleApp_part1.pbi : link stm32l4xx_nucleo.pbi stm32l4xx_nucleo_bus.pbi system_stm32l4xx.pbi stm32l4xx_hal.pbi stm32l4xx_hal_cortex.pbi stm32l4xx_hal_dma.pbi
-build SampleApp_part2.pbi : link stm32l4xx_hal_dma_ex.pbi stm32l4xx_hal_exti.pbi stm32l4xx_hal_flash.pbi stm32l4xx_hal_flash_ex.pbi stm32l4xx_hal_flash_ramfunc.pbi stm32l4xx_hal_gpio.pbi
-build SampleApp_part3.pbi : link stm32l4xx_hal_i2c.pbi stm32l4xx_hal_i2c_ex.pbi stm32l4xx_hal_pwr.pbi stm32l4xx_hal_pwr_ex.pbi stm32l4xx_hal_rcc.pbi stm32l4xx_hal_rcc_ex.pbi
-build SampleApp_part4.pbi : link stm32l4xx_hal_spi.pbi stm32l4xx_hal_spi_ex.pbi stm32l4xx_hal_tim.pbi stm32l4xx_hal_tim_ex.pbi stm32l4xx_hal_uart.pbi stm32l4xx_hal_uart_ex.pbi
-build SampleApp_part5.pbi : link bluenrg_gap_aci.pbi bluenrg_gatt_aci.pbi bluenrg_hal_aci.pbi bluenrg_l2cap_aci.pbi bluenrg_updater_aci.pbi bluenrg_utils_small.pbi
-build SampleApp_part6.pbi : link hci_le.pbi hci_tl.pbi ble_list.pbi
+build SampleApp_part0.pbi : link app_x-cube-ble1.pbi hci_tl_interface.pbi main.pbi robot.pbi sample_service.pbi stm32l4xx_hal_msp.pbi
+build SampleApp_part1.pbi : link stm32l4xx_it.pbi stm32l4xx_nucleo.pbi stm32l4xx_nucleo_bus.pbi system_stm32l4xx.pbi stm32l4xx_hal.pbi stm32l4xx_hal_cortex.pbi
+build SampleApp_part2.pbi : link stm32l4xx_hal_dma.pbi stm32l4xx_hal_dma_ex.pbi stm32l4xx_hal_exti.pbi stm32l4xx_hal_flash.pbi stm32l4xx_hal_flash_ex.pbi stm32l4xx_hal_flash_ramfunc.pbi
+build SampleApp_part3.pbi : link stm32l4xx_hal_gpio.pbi stm32l4xx_hal_i2c.pbi stm32l4xx_hal_i2c_ex.pbi stm32l4xx_hal_pwr.pbi stm32l4xx_hal_pwr_ex.pbi stm32l4xx_hal_rcc.pbi
+build SampleApp_part4.pbi : link stm32l4xx_hal_rcc_ex.pbi stm32l4xx_hal_spi.pbi stm32l4xx_hal_spi_ex.pbi stm32l4xx_hal_tim.pbi stm32l4xx_hal_tim_ex.pbi stm32l4xx_hal_uart.pbi
+build SampleApp_part5.pbi : link stm32l4xx_hal_uart_ex.pbi bluenrg_gap_aci.pbi bluenrg_gatt_aci.pbi bluenrg_hal_aci.pbi bluenrg_l2cap_aci.pbi bluenrg_updater_aci.pbi
+build SampleApp_part6.pbi : link bluenrg_utils_small.pbi hci_le.pbi hci_tl.pbi ble_list.pbi
 build SampleApp.pbd : link SampleApp_part0.pbi SampleApp_part1.pbi SampleApp_part2.pbi SampleApp_part3.pbi SampleApp_part4.pbi SampleApp_part5.pbi SampleApp_part6.pbi
 build SampleApp.pbw : browsedata SampleApp.pbd
 
