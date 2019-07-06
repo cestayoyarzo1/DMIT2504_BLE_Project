@@ -49,16 +49,18 @@
     <ListView
         android:id="@+id/activity_main_devices_listview"
         android:layout_width="match_parent"
-        android:layout_height="314dp" />
+        android:layout_height="100dp">
+
+    </ListView>
 
     <EditText
         android:id="@+id/activity_main_direction_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:ems="10"
         android:hint="@string/activity_main_direction_text"
-        android:inputType="number|textPersonName" />
+        android:inputType="number"
+        android:textAlignment="center" />
 
     <Button
         android:id="@+id/button"

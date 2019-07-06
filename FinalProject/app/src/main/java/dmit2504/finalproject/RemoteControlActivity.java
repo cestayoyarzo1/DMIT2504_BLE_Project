@@ -74,6 +74,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     reverseButton.setColorFilter(Color.argb(100, 0,255,0));
                     //Toast.makeText(getApplicationContext(), "Button REVERSE down", Toast.LENGTH_LONG).show();
                     statusTextView.setText("REVERSE");
+
                     break;
 
                 case MotionEvent.ACTION_UP:

@@ -336,7 +336,7 @@ void hci_user_evt_proc(void)
     list_remove_head (&hciReadPktRxQueue, (tListNode **)&hciReadPacket);
     if (hciContext.UserEvtRx != NULL)
     {
-      hciContext.UserEvtRx(hciReadPacket->dataBuff);
+      hciContext.UserEvtRx(hciReadPacket->dataBuff); 
     }
     list_insert_tail(&hciReadPktPool, (tListNode *)hciReadPacket);
   }

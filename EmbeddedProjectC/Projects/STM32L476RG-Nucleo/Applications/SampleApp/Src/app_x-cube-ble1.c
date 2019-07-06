@@ -322,6 +322,7 @@ void BSP_PB_Callback(Button_TypeDef Button)
 {
   /* Set the User Button flag */
   user_button_pressed = 1;
+  
 }
 
 #ifdef __cplusplus
