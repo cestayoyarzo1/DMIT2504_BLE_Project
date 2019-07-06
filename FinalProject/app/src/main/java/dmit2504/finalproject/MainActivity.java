@@ -309,9 +309,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSendDirection(View view){
-        String value = directionTextView.getText().toString();
-        Toast.makeText(this, "You are sending :" + value, Toast.LENGTH_LONG).show();
-        customCharacteristic.setValue(value);
-        bluetoothGatt.writeCharacteristic(customCharacteristic);
+        if(customCharacteristic != null) {
+            String value = directionTextView.getText().toString();
+            Toast.makeText(this, "You are sending :" + value, Toast.LENGTH_LONG).show();
+            customCharacteristic.setValue(value);
+            bluetoothGatt.writeCharacteristic(customCharacteristic);
+            Intent intent = new Intent(this, RemoteControlActivity.class);
+            intent.putExtra("ROBOT", robotDevice);
+            startActivity(intent);
+        }
+//        String value = directionTextView.getText().toString();
+//        Toast.makeText(this, "You are sending :" + value, Toast.LENGTH_LONG).show();
+//        customCharacteristic.setValue(value);
+//        bluetoothGatt.writeCharacteristic(customCharacteristic);
+//        Intent intent = new Intent(this, RemoteControlActivity.class);
+//        intent.putExtra("ROBOT", robotDevice);
+//        startActivity(intent);
     }
 }
