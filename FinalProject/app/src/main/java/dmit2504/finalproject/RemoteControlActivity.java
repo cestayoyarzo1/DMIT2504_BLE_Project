@@ -151,7 +151,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     forwardButton.setColorFilter(Color.argb(100, 0,255,0));
                     //Toast.makeText(getApplicationContext(), "Button FORWARD down", Toast.LENGTH_LONG).show();
                     statusTextView.setText("FORWARD");
-                    customCharacteristic.setValue("@MF");
+                    customCharacteristic.setValue("@MF0");
                     bluetoothGatt.writeCharacteristic(customCharacteristic);
                     break;
 
@@ -162,7 +162,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     //forwardButton.clearAnimation();
                     forwardButton.setColorFilter(Color.alpha(0));
                     statusTextView.setText("IDLE");
-                    customCharacteristic.setValue("@M0");
+                    customCharacteristic.setValue("@M00");
                     bluetoothGatt.writeCharacteristic(customCharacteristic);
                     break;
                 }
@@ -202,7 +202,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     reverseButton.setColorFilter(Color.argb(100, 0,255,0));
                     //Toast.makeText(getApplicationContext(), "Button REVERSE down", Toast.LENGTH_LONG).show();
                     statusTextView.setText("REVERSE");
-                    customCharacteristic.setValue("@MB");
+                    customCharacteristic.setValue("@MB0");
                     bluetoothGatt.writeCharacteristic(customCharacteristic);
                     break;
 
@@ -212,7 +212,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     reverseButton.setColorFilter(Color.alpha(0));
                     //Toast.makeText(getApplicationContext(), "Button REVERSE up", Toast.LENGTH_LONG).show();
                     statusTextView.setText("IDLE");
-                    customCharacteristic.setValue("@M0");
+                    customCharacteristic.setValue("@M00");
                     bluetoothGatt.writeCharacteristic(customCharacteristic);
                     break;
             }
@@ -230,7 +230,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     rightButton.setColorFilter(Color.argb(100, 0,255,0));
                     //Toast.makeText(getApplicationContext(), "Button RIGHT down", Toast.LENGTH_LONG).show();
                     statusTextView.setText("RIGHT");
-                    customCharacteristic.setValue("@MR");
+                    customCharacteristic.setValue("@MR0");
                     bluetoothGatt.writeCharacteristic(customCharacteristic);
                     break;
 
@@ -240,7 +240,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     rightButton.setColorFilter(Color.alpha(0));
                     //Toast.makeText(getApplicationContext(), "Button RIGHT up", Toast.LENGTH_LONG).show();
                     statusTextView.setText("IDLE");
-                    customCharacteristic.setValue("@M0");
+                    customCharacteristic.setValue("@M00");
                     bluetoothGatt.writeCharacteristic(customCharacteristic);
                     break;
             }
@@ -258,7 +258,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     leftButton.setColorFilter(Color.argb(100, 0,255,0));
                     //Toast.makeText(getApplicationContext(), "Button LEFT down", Toast.LENGTH_LONG).show();
                     statusTextView.setText("LEFT");
-                    customCharacteristic.setValue("@ML");
+                    customCharacteristic.setValue("@ML0");
                     bluetoothGatt.writeCharacteristic(customCharacteristic);
                     break;
 
@@ -268,7 +268,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     leftButton.setColorFilter(Color.alpha(0));
                     //Toast.makeText(getApplicationContext(), "Button LEFT up", Toast.LENGTH_LONG).show();
                     statusTextView.setText("IDLE");
-                    customCharacteristic.setValue("@M0");
+                    customCharacteristic.setValue("@M00");
                     bluetoothGatt.writeCharacteristic(customCharacteristic);
                     break;
             }

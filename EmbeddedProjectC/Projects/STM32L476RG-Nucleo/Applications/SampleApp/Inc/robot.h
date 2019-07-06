@@ -11,19 +11,20 @@
 #include <stdio.h>
 
   void Robot_Init(TIM_TypeDef* _rightTimer, TIM_TypeDef* _leftTimer);
-  void Robot_SetDutyCycle(int  _duty);
+  void Robot_SetDutyCycle(uint16_t  _duty);
   void Robot_Stop();
   void Robot_Forward();
-  void Robot_ForwardSpeed(int _duty);
+  void Robot_ForwardSpeed(uint16_t _duty);
   void Robot_Reverse();
-  void Robot_ReverseSpeed(int _duty);
+  void Robot_ReverseSpeed(uint16_t _duty);
   void Robot_TurnLeft();
-  void Robot_TurnLeftSpeed(int _duty);
+  void Robot_TurnLeftSpeed(uint16_t _duty);
   void Robot_TurnRight();
-  void Robot_TurnRightSpeed(int _duty);
+  void Robot_TurnRightSpeed(uint16_t _duty);
   void Robot_Run();
   void Robot_ParseCommand(tHciDataPacket* packet);
-    
+
+  
 
               
              

@@ -21,6 +21,8 @@
  } ;   
  
  int state;
+ 
+tHciDataPacket robotPacket;
 
 void Robot_Init(TIM_TypeDef* _rightTimer, TIM_TypeDef* _leftTimer)
 {
@@ -29,7 +31,7 @@ void Robot_Init(TIM_TypeDef* _rightTimer, TIM_TypeDef* _leftTimer)
   state = Idle;
 }
 //------------------------------------------------------------------------------
-void Robot_SetDutyCycle(int _duty)
+void Robot_SetDutyCycle(uint16_t _duty)
 {
    robot_duty_cycle = _duty;
 }
@@ -50,7 +52,7 @@ void Robot_Forward()
   lTimer->CCR3 = robot_duty_cycle;
 }
 //------------------------------------------------------------------------------
-void Robot_ForwardSpeed(int _duty)
+void Robot_ForwardSpeed(uint16_t _duty)
 {
   Robot_Stop();
   Robot_SetDutyCycle(_duty);
@@ -65,7 +67,7 @@ void Robot_Reverse()
   lTimer->CCR4 = robot_duty_cycle;
 }
 //------------------------------------------------------------------------------
-void Robot_ReverseSpeed(int _duty)
+void Robot_ReverseSpeed(uint16_t _duty)
 {
   Robot_Stop();
   Robot_SetDutyCycle(_duty);
@@ -80,7 +82,7 @@ void Robot_TurnRight()
   lTimer->CCR3 = robot_duty_cycle;  
 }
 //------------------------------------------------------------------------------
-void Robot_TurnRightSpeed(int _duty)
+void Robot_TurnRightSpeed(uint16_t _duty)
 {
   Robot_Stop();
   Robot_SetDutyCycle(_duty);  
@@ -95,7 +97,7 @@ void Robot_TurnLeft()
   lTimer->CCR4 = robot_duty_cycle; 
 }
 //------------------------------------------------------------------------------
-void Robot_TurnLeftSpeed(int _duty)
+void Robot_TurnLeftSpeed(uint16_t _duty)
 {
   Robot_Stop();
   Robot_SetDutyCycle(_duty);  
@@ -157,7 +159,16 @@ void Robot_Run()
 //------------------------------------------------------------------------------
  void Robot_ParseCommand(tHciDataPacket* packet)
  {
-    printf("\n\rReceiving Instruction");
+
+    if(packet->data_len == 16)
+    {
+      memcpy(&robotPacket.dataBuff, packet->dataBuff, packet->data_len);
+//      for(int i=0; i<packet->data_len, i++)
+//      {
+//        robotPacket
+//      }
+      printf("\n\rReceiving Instruction: ");     
+    }
  }
 
 
