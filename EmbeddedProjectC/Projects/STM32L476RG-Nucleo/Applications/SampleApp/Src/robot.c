@@ -20,7 +20,7 @@
   TurningLeft,
  } ;   
  
- uint8_t robot_state;
+ uint8_t robot_state, prev_state;
  
 //tHciDataPacket robotPacket;
 
@@ -31,7 +31,7 @@ void Robot_Init(TIM_TypeDef* _rightTimer, TIM_TypeDef* _leftTimer)
 {
   rTimer = _rightTimer;
   lTimer = _leftTimer;
-  robot_state = Idle;
+  robot_state = prev_state = Idle;
   speed = 5;
 }
 //------------------------------------------------------------------------------
@@ -47,6 +47,7 @@ void Robot_Stop()
   rTimer->CCR4 = robot_duty_cycle;
   lTimer->CCR3 = robot_duty_cycle;
   lTimer->CCR4 = robot_duty_cycle;
+  robot_state = Idle;
 }
 //------------------------------------------------------------------------------
 void Robot_Forward()
@@ -54,6 +55,7 @@ void Robot_Forward()
   Robot_Stop();
   rTimer->CCR3 = robot_duty_cycle;
   lTimer->CCR3 = robot_duty_cycle;
+  robot_state = MovingForward;
 }
 //------------------------------------------------------------------------------
 void Robot_ForwardSpeed(uint16_t _duty)
@@ -62,6 +64,7 @@ void Robot_ForwardSpeed(uint16_t _duty)
   Robot_SetDutyCycle(_duty);
   rTimer->CCR3 = robot_duty_cycle;
   lTimer->CCR3 = robot_duty_cycle;
+  robot_state = MovingForward;
 }
 //------------------------------------------------------------------------------
 void Robot_Reverse()
@@ -69,6 +72,7 @@ void Robot_Reverse()
   Robot_Stop();
   rTimer->CCR4 = robot_duty_cycle;
   lTimer->CCR4 = robot_duty_cycle;
+  robot_state = MovingBackwards;
 }
 //------------------------------------------------------------------------------
 void Robot_ReverseSpeed(uint16_t _duty)
@@ -77,13 +81,15 @@ void Robot_ReverseSpeed(uint16_t _duty)
   Robot_SetDutyCycle(_duty);
   rTimer->CCR4 = robot_duty_cycle;
   lTimer->CCR4 = robot_duty_cycle;
+  robot_state = MovingBackwards;
 }
 //------------------------------------------------------------------------------
 void Robot_TurnRight()
 {
   Robot_Stop();
   rTimer->CCR4 = robot_duty_cycle;
-  lTimer->CCR3 = robot_duty_cycle;  
+  lTimer->CCR3 = robot_duty_cycle; 
+  robot_state = TurningRight;
 }
 //------------------------------------------------------------------------------
 void Robot_TurnRightSpeed(uint16_t _duty)
@@ -91,14 +97,16 @@ void Robot_TurnRightSpeed(uint16_t _duty)
   Robot_Stop();
   Robot_SetDutyCycle(_duty);  
   rTimer->CCR4 = robot_duty_cycle;
-  lTimer->CCR3 = robot_duty_cycle;  
+  lTimer->CCR3 = robot_duty_cycle; 
+  robot_state = TurningRight;
 }
 //------------------------------------------------------------------------------
 void Robot_TurnLeft()
 {
   Robot_Stop();
   rTimer->CCR3 = robot_duty_cycle;
-  lTimer->CCR4 = robot_duty_cycle; 
+  lTimer->CCR4 = robot_duty_cycle;
+  robot_state = TurningLeft;
 }
 //------------------------------------------------------------------------------
 void Robot_TurnLeftSpeed(uint16_t _duty)
@@ -107,6 +115,7 @@ void Robot_TurnLeftSpeed(uint16_t _duty)
   Robot_SetDutyCycle(_duty);  
   rTimer->CCR3 = robot_duty_cycle;
   lTimer->CCR4 = robot_duty_cycle;
+  robot_state = TurningLeft;
 }
 //------------------------------------------------------------------------------
 void Robot_Run()
@@ -114,22 +123,43 @@ void Robot_Run()
   switch(robot_state)
   {
     case Idle:
-      
+      if(robot_state != prev_state)
+      {
+        prev_state = robot_state;
+        printf("Idle");
+      }
       break;
 
     case MovingForward:
-
+      if(robot_state != prev_state)
+      {
+        prev_state = robot_state;
+        printf("Forward");
+      }
       break;
       
     case MovingBackwards:
+      if(robot_state != prev_state)
+      {
+        prev_state = robot_state;
+        printf("Reverse");
+      }    
       break;
       
     case TurningRight:
-      
+      if(robot_state != prev_state)
+      {
+        prev_state = robot_state;
+        printf("Turn Right");
+      }     
       break;
 
     case TurningLeft:
-      
+      if(robot_state != prev_state)
+      {
+        prev_state = robot_state;
+        printf("Turn Left");
+      }        
       break;    
   
   }
@@ -149,29 +179,24 @@ void Robot_Run()
           {
             case 'F': //formward
               Robot_Forward();
-              printf("\n\rMoving Forward ");  
               break;
               
             case 'B': //backwards, reverse
               Robot_Reverse();
-              printf("\n\rMoving Reverse ");  
 
               break;  
               
             case 'R': //right
               Robot_TurnRight();
-              printf("\n\rTurning Right ");
 
               break; 
               
             case 'L': //left
               Robot_TurnLeft();
-              printf("\n\rTurning Left ");
               break; 
               
             case '0': //idle, stop
               Robot_Stop();
-              printf("\n\rStopping ");
               break;               
           }
         break;

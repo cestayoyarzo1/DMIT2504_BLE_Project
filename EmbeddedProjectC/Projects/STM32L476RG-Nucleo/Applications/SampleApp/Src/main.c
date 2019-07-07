@@ -21,6 +21,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "app_x-cube-ble1.h"
+#include "robot.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -102,6 +103,7 @@ int main(void)
 
   MX_BlueNRG_MS_Process();
     /* USER CODE BEGIN 3 */
+  Robot_Run();
   }
   /* USER CODE END 3 */
 }
