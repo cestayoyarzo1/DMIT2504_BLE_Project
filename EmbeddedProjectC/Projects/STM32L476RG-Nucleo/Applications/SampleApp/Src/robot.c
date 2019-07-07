@@ -20,7 +20,7 @@
   TurningLeft,
  } ;   
  
- uint8_t state;
+ uint8_t robot_state;
  
 //tHciDataPacket robotPacket;
 
@@ -31,7 +31,7 @@ void Robot_Init(TIM_TypeDef* _rightTimer, TIM_TypeDef* _leftTimer)
 {
   rTimer = _rightTimer;
   lTimer = _leftTimer;
-  state = Idle;
+  robot_state = Idle;
   speed = 5;
 }
 //------------------------------------------------------------------------------
@@ -111,51 +111,25 @@ void Robot_TurnLeftSpeed(uint16_t _duty)
 //------------------------------------------------------------------------------
 void Robot_Run()
 {
-  switch(state)
+  switch(robot_state)
   {
     case Idle:
-      if(toggleState)
-      {
-        Robot_ForwardSpeed(500);
-        toggleState = FALSE;
-        state = MovingForward;
-      }
+      
       break;
 
     case MovingForward:
-      if(toggleState)
-      {
-        Robot_ReverseSpeed(500);
-        toggleState = FALSE;
-        state = MovingBackwards;
-      }
+
       break;
       
     case MovingBackwards:
-      if(toggleState)
-      {
-        Robot_TurnRightSpeed(250);
-        toggleState = FALSE;
-        state = TurningRight;
-      }
       break;
       
     case TurningRight:
-      if(toggleState)
-      {
-        Robot_TurnLeftSpeed(250);
-        toggleState = FALSE;
-        state = TurningLeft;
-      }      
+      
       break;
 
     case TurningLeft:
-      if(toggleState)
-      {
-        Robot_Stop();
-        toggleState = FALSE;
-        state = Idle;
-      }       
+      
       break;    
   
   }
@@ -167,11 +141,6 @@ void Robot_Run()
     if(packet->data_len == 16)
     {
       memcpy(command, packet->dataBuff+12, 4);
-//      for(int i=0; i<packet->data_len, i++)
-//      {
-//        robotPacket
-//      }
-      //printf("\n\rReceiving Instruction: ");   
       
       switch(command[1])
       {
@@ -179,22 +148,29 @@ void Robot_Run()
           switch(command[2])
           {
             case 'F': //formward
-              printf("\n\rMoving Forward ");   
+              Robot_Forward();
+              printf("\n\rMoving Forward ");  
               break;
               
             case 'B': //backwards, reverse
-              printf("\n\rMoving Reverse ");   
+              Robot_Reverse();
+              printf("\n\rMoving Reverse ");  
+
               break;  
               
             case 'R': //right
+              Robot_TurnRight();
               printf("\n\rTurning Right ");
+
               break; 
               
             case 'L': //left
+              Robot_TurnLeft();
               printf("\n\rTurning Left ");
               break; 
               
             case '0': //idle, stop
+              Robot_Stop();
               printf("\n\rStopping ");
               break;               
           }
@@ -203,12 +179,12 @@ void Robot_Run()
         case 'S': //command is for speed 
             speed = (command[2] - 48)*100;
             speed += (command[3] - 48)*10;
+            Robot_SetDutyCycle(speed);
           break;
             
         default:
           break;        
-      }
-      
+      }     
     }
  }
 
