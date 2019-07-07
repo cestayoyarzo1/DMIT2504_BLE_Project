@@ -18,7 +18,7 @@
         <LeaveTargetRunning>_ 0</LeaveTargetRunning>
     </StLinkDriver>
     <DebugChecksum>
-        <Checksum>3462365169</Checksum>
+        <Checksum>1748868323</Checksum>
     </DebugChecksum>
     <Exceptions>
         <StopOnUncaught>_ 0</StopOnUncaught>
@@ -46,6 +46,7 @@
     </JLinkDriver>
     <Registers>
         <regBase0>TIM3_ARR 10</regBase0>
+        <regBase1>TIM3_CCR3 10</regBase1>
     </Registers>
     <watch_formats>
         <Fmt0>{W}42:speed	3	0</Fmt0>

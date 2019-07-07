@@ -8,8 +8,6 @@
 
  TIM_TypeDef* rTimer;
  TIM_TypeDef* lTimer;
- int robot_duty_cycle;
- int toggleState;
  
  enum RobotState
  {
@@ -26,6 +24,7 @@
 
 uint8_t command[4];
 uint16_t speed;
+uint16_t robot_duty_cycle;
 
 void Robot_Init(TIM_TypeDef* _rightTimer, TIM_TypeDef* _leftTimer)
 {
@@ -33,6 +32,7 @@ void Robot_Init(TIM_TypeDef* _rightTimer, TIM_TypeDef* _leftTimer)
   lTimer = _leftTimer;
   robot_state = prev_state = Idle;
   speed = 500;
+  robot_duty_cycle = speed;  
 }
 //------------------------------------------------------------------------------
 void Robot_SetDutyCycle(uint16_t _duty)
@@ -204,12 +204,36 @@ void Robot_Run()
             speed = (command[2] - 48)*1000;
             speed += (command[3] - 48)*100;
             Robot_SetDutyCycle(speed);
+            switch(robot_state) //update speed according to state
+            {
+              case Idle:
+                break;
+                
+              case MovingForward:
+                Robot_Forward();
+                break;
+                
+              case MovingBackwards:
+                Robot_Reverse();
+                break;
+                
+              case TurningRight:
+                Robot_TurnRight();
+                break;
+                
+              case TurningLeft:
+                Robot_TurnLeft();
+                break;  
+                
+              default:
+                break;
+            }//switch robot state
           break;
-            
+ 
         default:
           break;        
-      }     
-    }
+      } //end case  
+    }//End if packet is a comenad (size 16)
  }
 
 

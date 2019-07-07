@@ -85,7 +85,6 @@ int main(void)
   /* Configure the system clock */
   //SystemClock_Config();
   Clock();
-
   /* USER CODE BEGIN SysInit */
 
   /* USER CODE END SysInit */
@@ -96,6 +95,7 @@ int main(void)
   
   /* USER CODE BEGIN 2 */
   Timers();
+  Uart();
   Robot_Init(TIM3, TIM4);
   /* USER CODE END 2 */
 
@@ -272,6 +272,35 @@ void Timers()
   TIM4->CR1 |= TIM_CR1_CEN;            // Start timer  
   
 }
+
+//Uart--------------------------------------------------------------------------
+void Uart()
+{
+
+  //UART2
+  // TX
+  GPIOA->MODER &= ~GPIO_MODER_MODER2;  //Clear MODER
+  GPIOA->MODER |= GPIO_MODER_MODER2_1; //Set alternate function
+  GPIOA->AFR[0] |= 7<<8;              //Set alternate function 7 (UART)
+  
+  // RX
+  GPIOA->MODER &= ~GPIO_MODER_MODER3;  //Clear MODER
+  GPIOA->MODER |= GPIO_MODER_MODER3_1; //Set alternate function
+  GPIOA->AFR[0] |= 7<<12;               //Set alternate function 7 (UART)
+  
+  //Important!!! no floating inputs TX  pull high and RX pull low
+  GPIOA->PUPDR |= GPIO_PUPDR_PUPDR2_0 | GPIO_PUPDR_PUPDR15_1;
+  
+  NVIC_EnableIRQ(USART2_IRQn); // CM4 Intrinsic
+  USART2->CR1 |= USART_CR1_RXNEIE;
+  
+    // Disable UART
+  USART2->CR1 &= ~(USART_CR1_UE | USART_CR1_TE | USART_CR1_RE);
+  USART2->BRR = UART_115200;
+  // Enable UART, Tx and Rx
+  USART2->CR1 |= USART_CR1_UE | USART_CR1_TE | USART_CR1_RE;
+}
+
 //CARLOS ADDED CODE END*****
 
 /**
@@ -284,22 +313,22 @@ void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
-//  /** Initializes the CPU, AHB and APB busses clocks 
-//  */
-//  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-//  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-//  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-//  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-//  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-//  RCC_OscInitStruct.PLL.PLLM = 1;
-//  RCC_OscInitStruct.PLL.PLLN = 10;
-//  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV7;
-//  RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
-//  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
-//  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-//  {
-//    Error_Handler();
-//  }
+  /** Initializes the CPU, AHB and APB busses clocks 
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLM = 1;
+  RCC_OscInitStruct.PLL.PLLN = 10;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV7;
+  RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
+  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
   /** Initializes the CPU, AHB and APB busses clocks 
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK

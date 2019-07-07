@@ -18,8 +18,15 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
+#define  UART_57600  1389
+#define  UART_115200 694
+
+    
+    
+    
 void Clock();
 void Timers();
+void Uart();
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H
