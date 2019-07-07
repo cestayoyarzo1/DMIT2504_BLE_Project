@@ -18,7 +18,8 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
-
+void Clock();
+void Timers();
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H

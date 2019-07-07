@@ -32,7 +32,7 @@ void Robot_Init(TIM_TypeDef* _rightTimer, TIM_TypeDef* _leftTimer)
   rTimer = _rightTimer;
   lTimer = _leftTimer;
   robot_state = prev_state = Idle;
-  speed = 5;
+  speed = 500;
 }
 //------------------------------------------------------------------------------
 void Robot_SetDutyCycle(uint16_t _duty)
@@ -42,11 +42,10 @@ void Robot_SetDutyCycle(uint16_t _duty)
 //------------------------------------------------------------------------------
 void Robot_Stop()
 {
-  robot_duty_cycle = 0;
-  rTimer->CCR3 = robot_duty_cycle;
-  rTimer->CCR4 = robot_duty_cycle;
-  lTimer->CCR3 = robot_duty_cycle;
-  lTimer->CCR4 = robot_duty_cycle;
+  rTimer->CCR3 = 0;
+  rTimer->CCR4 = 0;
+  lTimer->CCR3 = 0;
+  lTimer->CCR4 = 0;
   robot_state = Idle;
 }
 //------------------------------------------------------------------------------
@@ -202,8 +201,8 @@ void Robot_Run()
         break;
         
         case 'S': //command is for speed 
-            speed = (command[2] - 48)*100;
-            speed += (command[3] - 48)*10;
+            speed = (command[2] - 48)*1000;
+            speed += (command[3] - 48)*100;
             Robot_SetDutyCycle(speed);
           break;
             

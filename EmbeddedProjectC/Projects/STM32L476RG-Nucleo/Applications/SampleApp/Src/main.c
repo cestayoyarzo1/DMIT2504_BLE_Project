@@ -17,6 +17,7 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
+#define SYSCLK 80000000
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -75,14 +76,15 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+  //HAL_Init();
 
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
 
   /* Configure the system clock */
-  SystemClock_Config();
+  //SystemClock_Config();
+  Clock();
 
   /* USER CODE BEGIN SysInit */
 
@@ -91,8 +93,10 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_BlueNRG_MS_Init();
+  
   /* USER CODE BEGIN 2 */
-
+  Timers();
+  Robot_Init(TIM3, TIM4);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -107,6 +111,168 @@ int main(void)
   }
   /* USER CODE END 3 */
 }
+//CARLOS ADDED CODE
+//-------------------------------------------------------------------------clock
+void Clock()
+{
+  //Enable peripherals
+  RCC->APB1ENR1 |= RCC_APB1ENR1_PWREN;  //Enable power interface
+  
+  //Enable instruction prefetch, data and instruction cache
+  FLASH->ACR |= FLASH_ACR_PRFTEN | FLASH_ACR_ICEN | FLASH_ACR_DCEN;
+  
+  //Slowdown FLASH
+  FLASH->ACR &= ~FLASH_ACR_LATENCY;
+  FLASH->ACR |= FLASH_ACR_LATENCY_1WS;
+  
+  //System will be running from MSI trimmed from LSE
+  
+  //Configure LSE
+  PWR->CR1 |= PWR_CR1_DBP;                      //Enable backup domain write
+  
+  RCC->BDCR &= ~RCC_BDCR_BDRST;                 //Do NOT reset backup domain
+  RCC->BDCR &= ~RCC_BDCR_LSEBYP;                //No LSE Bypass (use crystal)
+  RCC->BDCR |= RCC_BDCR_LSEON;                  //LSE ON
+  while(!(RCC->BDCR & RCC_BDCR_LSERDY));        //Wait until LSE is Ready
+  
+  RCC->BDCR |= RCC_BDCR_RTCSEL_0;             //LSE as RTC clock
+  RCC->BDCR |= RCC_BDCR_RTCEN;                //Enable RTC
+  
+  PWR->CR1 &= ~PWR_CR1_DBP;                     //Disable backup domain write
+  
+  //Configure MSI
+  RCC->CR &= ~RCC_CR_MSION;             //Turn MSI Off
+  RCC->CR &= ~RCC_CR_MSIPLLEN;          //Disable MSI PLL
+  RCC->CR |= RCC_CR_MSIRGSEL;           //Take Frequency Range from RCC->CR  
+  RCC->CR &= ~RCC_CR_MSIRANGE;          //Clear Range
+  RCC->CR |= RCC_CR_MSIRANGE_6;        //4Mhz Range
+  RCC->CR |= RCC_CR_MSIPLLEN;           //Enable MSI PLL (Auto trim by LSE)
+  RCC->CR |= RCC_CR_MSION;              //Turn On MSI
+  while(!(RCC->CR & RCC_CR_MSIRDY));    //Wait until MSI is stable
+  
+  RCC->PLLCFGR |= RCC_PLLCFGR_PLLSRC_MSI; //MSI as PLL clock Source
+  RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLM;    //Clear PLLM, M = 1
+  RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLN;     //Clear PLLN
+  RCC->PLLCFGR |= RCC_PLLCFGR_PLLN_3 | RCC_PLLCFGR_PLLN_5; //N = 40
+                                        // PLLR is 2 after reset
+  
+  RCC->CFGR &= ~RCC_CFGR_MCOSEL;        //Clear MCOSEL
+  //RCC->CFGR |= RCC_CFGR_MCOSEL_1;     //MSI as MCO
+  RCC->CFGR |= RCC_CFGR_MCOSEL_0;       //SysCLK as MCO = 80 Mhz
+  RCC->CFGR |= RCC_CFGR_MCO_PRE_16;       // MCO / 16 = 5 Mhz
+    
+  /*
+  // USB clocks begin
+  RCC->PLLSAI1CFGR = 0x00101800;        //TODO Expand this
+  RCC->CR |= RCC_CR_PLLSAI1ON;          //Turn On PLLSAI1
+  while(!(RCC->CR & RCC_CR_PLLSAI1RDY));//Wait until PLLSAI1 is stable
+  RCC->CCIPR |= RCC_CCIPR_CLK48SEL_0;
+  // USB clocks end
+  */
+  
+  RCC->CR |= RCC_CR_PLLON;              //Turn On PLL
+  while(!RCC->CR & RCC_CR_PLLRDY);      //Wait until PLL is locked
+  RCC->PLLCFGR |= RCC_PLLCFGR_PLLREN;   //Enable PLL Output
+  
+  RCC->CFGR &= ~RCC_CFGR_SW;            //Clear SySClk selection (fallback to MSI)
+  RCC->CFGR |= RCC_CFGR_SW_0 | RCC_CFGR_SW_1; //PLL as SYSCLK
+  
+  SysTick_Config(SYSCLK / 1000); // 80Mhz / 1000 = 80Khz, 1ms Ticks
+  NVIC_EnableIRQ(SysTick_IRQn);
+  
+  RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;  //Enable PORT A
+  RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;  //Enable PORT B
+  RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN;  //Enable PORT C
+  
+  RCC->APB2ENR |= RCC_APB2ENR_USART1EN; // Enable UART 1
+  RCC->APB1ENR1 |= RCC_APB1ENR1_USART2EN; // Enable UART 2
+  RCC->APB1ENR1 |= RCC_APB1ENR1_USART3EN; // Enable UART 3
+  
+  RCC->APB1ENR1 |= RCC_APB1ENR1_TIM3EN; // Enable TIMER 3
+  RCC->APB1ENR1 |= RCC_APB1ENR1_TIM4EN; // Enable TIMER 4
+  
+  
+  
+  /*
+  GPIOC->MODER &= ~GPIO_MODER_MODER0;
+  GPIOC->MODER |= GPIO_MODER_MODER0_0;
+  //GPIOC->BSRR |= GPIO_BSRR_BS_0;
+  GPIOC->BRR |= GPIO_BRR_BR_0;
+  */
+  
+  GPIOC->MODER &= ~GPIO_MODER_MODER0;
+  GPIOC->MODER |= GPIO_MODER_MODER0;
+  //GPIOC->BSRR |= GPIO_BSRR_BS_0;
+  //GPIOC->BRR |= GPIO_BRR_BR_0;
+}
+
+//Timers------------------------------------------------------------------------
+void Timers()
+{
+  //TIM3 Configuration, right wheels
+  
+  //PC8->TIM3_CH3 (AF2) -> FORWARD
+  GPIOC->MODER &= ~GPIO_MODER_MODER8;           // Clear MODER settings
+  GPIOC->MODER |= GPIO_MODER_MODER8_1;          //Alternate function
+  GPIOC->AFR[1] |= 2<<0;                        //AF2
+  
+  //PC9->TIM3_CH4 (AF2) -> BACKWARD
+  GPIOC->MODER &= ~GPIO_MODER_MODER9;           // Clear MODER settings
+  GPIOC->MODER |= GPIO_MODER_MODER9_1;          //Alternate function
+  GPIOC->AFR[1] |= 2<<4;                        //AF2
+  
+  //Timer Configuration
+  
+  TIM3->CR1 &= ~TIM_CR1_CEN;            // Stop Timer
+  TIM3->PSC = 40-1;                     // Prescale clock to 2Mhz freq.
+  TIM3->ARR = 1000;                     // PWM frequency 2Mhz / 1000 (period) = 2Khz
+  TIM3->CCR3 = 250;                       // 50% Duty cycle, pwm off.
+  TIM3->CCR4 = 250;                       // 50% Duty cycle, pwm off.
+  TIM3->CCMR2 |= TIM_CCMR2_OC3M_2 | TIM_CCMR2_OC3M_1; //PWM type 1 CH3 (not inverted)
+  TIM3->CCMR2 |= TIM_CCMR2_OC4M_2 | TIM_CCMR2_OC4M_1; //PWM type 1 CH4 (not inverted)
+  TIM3->CCMR2 |= TIM_CCMR2_OC3PE;      //Enable preload for channel 3
+  TIM3->CCMR2 |= TIM_CCMR2_OC4PE;      //Enable preload for channel 4
+  TIM3->CR1 |= TIM_CR1_ARPE;           //TIM3 ARR register is buffered
+  TIM3->CCER |= TIM_CCER_CC3E;         //Enable pwm output 1
+  TIM3->CCER |= TIM_CCER_CC4E;         //Enable pwm output 2
+  TIM3->BDTR |= TIM_BDTR_MOE;          //Main output enable
+  
+  TIM3->EGR |= TIM_EGR_UG;            // Enable register update
+  TIM3->CR1 |= TIM_CR1_CEN;            // Start timer  
+  
+  //TIM4 Configuration, left wheels
+  
+  //PB8->TIM4_CH3 (AF2) -> FORWARD
+  GPIOB->MODER &= ~GPIO_MODER_MODER8;           // Clear MODER settings
+  GPIOB->MODER |= GPIO_MODER_MODER8_1;          //Alternate function
+  GPIOB->AFR[1] |= 2<<0;                        //AF2
+ 
+  //PB9->TIM4_CH4 (AF2) -> BACKWARD
+  GPIOB->MODER &= ~GPIO_MODER_MODER9;           // Clear MODER settings
+  GPIOB->MODER |= GPIO_MODER_MODER9_1;          //Alternate function
+  GPIOB->AFR[1] |= 2<<4;                        //AF2 
+  
+  //Timer Configuration
+  
+  TIM4->CR1 &= ~TIM_CR1_CEN;            // Stop Timer
+  TIM4->PSC = 40-1;                     // Prescale clock to 2Mhz freq.
+  TIM4->ARR = 1000;                     // PWM frequency 2Mhz / 1000 (period) = 2Khz
+  TIM4->CCR3 = 500;                       // 50% Duty cycle, pwm off.
+  TIM4->CCR4 = 500;                       // 50% Duty cycle, pwm off.
+  TIM4->CCMR2 |= TIM_CCMR2_OC3M_2 | TIM_CCMR2_OC3M_1; //PWM type 1 CH3 (not inverted)
+  TIM4->CCMR2 |= TIM_CCMR2_OC4M_2 | TIM_CCMR2_OC4M_1; //PWM type 1 CH4 (not inverted)
+  TIM4->CCMR2 |= TIM_CCMR2_OC3PE;      //Enable preload for channel 3
+  TIM4->CCMR2 |= TIM_CCMR2_OC4PE;      //Enable preload for channel 4
+  TIM4->CR1 |= TIM_CR1_ARPE;           //TIM4 ARR register is buffered
+  TIM4->CCER |= TIM_CCER_CC3E;         //Enable pwm output 1
+  TIM4->CCER |= TIM_CCER_CC4E;         //Enable pwm output 2
+  TIM4->BDTR |= TIM_BDTR_MOE;          //Main output enable  
+  
+  TIM4->EGR |= TIM_EGR_UG;            // Enable register update
+  TIM4->CR1 |= TIM_CR1_CEN;            // Start timer  
+  
+}
+//CARLOS ADDED CODE END*****
 
 /**
   * @brief System Clock Configuration
@@ -118,22 +284,22 @@ void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
-  /** Initializes the CPU, AHB and APB busses clocks 
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = 1;
-  RCC_OscInitStruct.PLL.PLLN = 10;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV7;
-  RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
-  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
+//  /** Initializes the CPU, AHB and APB busses clocks 
+//  */
+//  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+//  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+//  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+//  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+//  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+//  RCC_OscInitStruct.PLL.PLLM = 1;
+//  RCC_OscInitStruct.PLL.PLLN = 10;
+//  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV7;
+//  RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
+//  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
+//  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
   /** Initializes the CPU, AHB and APB busses clocks 
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
