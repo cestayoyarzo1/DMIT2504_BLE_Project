@@ -38,6 +38,10 @@ thumbs.db
 **/Obj/*.pbd.*
 **/Obj/*.pbi
 **/Obj/*.pbi.*
+**/Obj/*.ninja_log
+**/Obj/*.ninja_log.*
+**/Obj/*.xcl
+**/Obj/*.xcl.*
 
 # IAR project "Debug" directory
 Debug/
