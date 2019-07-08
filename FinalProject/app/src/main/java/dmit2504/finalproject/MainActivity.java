@@ -17,7 +17,6 @@ import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -147,7 +146,8 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_control:
                 // create an intent to start the ViewRemoteDataActivity
-                Intent intent = new Intent(this, RemoteControlActivity.class);
+                Intent intent = new Intent(getApplicationContext(), RemoteControlActivity.class);
+                intent.putExtra("ROBOT", robotDevice);
                 startActivity(intent);
                 return true;
 

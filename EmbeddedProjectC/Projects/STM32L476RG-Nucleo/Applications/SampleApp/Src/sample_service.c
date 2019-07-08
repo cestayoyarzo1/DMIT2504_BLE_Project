@@ -166,7 +166,7 @@ void Make_Connection(void)
     
   } else  {
     
-    const char local_name[] = {AD_TYPE_COMPLETE_LOCAL_NAME,'R','o','b','o','t','2'};
+    const char local_name[] = {AD_TYPE_COMPLETE_LOCAL_NAME,'R','o','b','o','t','1'};
     
     /* disable scan response */
     hci_le_set_scan_resp_data(0,NULL);

@@ -41,6 +41,16 @@ public class RemoteControlActivity extends AppCompatActivity {
 
     boolean connection;
 
+    enum MovingState{
+        Idle,
+        Forward,
+        Reverse,
+        Left,
+        Right
+    }
+
+    MovingState robotState, prevState;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,20 +79,21 @@ public class RemoteControlActivity extends AppCompatActivity {
         robot = getIntent().getParcelableExtra("ROBOT");
 
         if(robot != null){
-            Toast.makeText(this, "Remote device Connected: " + robot.getName(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Remote device Connected: " + robot.getName(), Toast.LENGTH_SHORT).show();
             bluetoothGatt = robot.connectGatt(getActivity(), false, gattCallback);
             titleTextView.setText("Connected to " + robot.getName());
             titleTextView.setTextColor(getResources().getColor(R.color.dark_green));
-
             connection = true;
 
         }
         else{
-            Toast.makeText(this, "Nothing to control", Toast.LENGTH_LONG);
+            Toast.makeText(this, "Nothing to control", Toast.LENGTH_SHORT);
             titleTextView.setText("Robot not connected");
             titleTextView.setTextColor(getResources().getColor(R.color.red));
             connection = false;
         }
+        robotState = MovingState.Idle;
+        prevState = MovingState.Idle;
     }
 
     private RemoteControlActivity getActivity() {
@@ -181,60 +192,74 @@ public class RemoteControlActivity extends AppCompatActivity {
     private View.OnTouchListener buttonForwardListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            switch(event.getAction()){
-                case MotionEvent.ACTION_DOWN:
-                    forwardButton.animate().scaleX(1.1f);
-                    forwardButton.animate().scaleY(1.1f);
-                    forwardButton.setColorFilter(Color.argb(100, 0,255,0));
-                    //Toast.makeText(getApplicationContext(), "Button FORWARD down", Toast.LENGTH_LONG).show();
-                    controlTextView.setText("FORWARD");
-                    customCharacteristic.setValue("@MF0");
-                    bluetoothGatt.writeCharacteristic(customCharacteristic);
-                    break;
+            if(connection){
+                switch(event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        forwardButton.animate().scaleX(1.1f);
+                        forwardButton.animate().scaleY(1.1f);
+                        forwardButton.setColorFilter(Color.argb(100, 0,255,0));
+                        //Toast.makeText(getApplicationContext(), "Button FORWARD down", Toast.LENGTH_LONG).show();
+                        controlTextView.setText("FORWARD");
+                        customCharacteristic.setValue("@MF0");
+                        bluetoothGatt.writeCharacteristic(customCharacteristic);
+                        prevState = MovingState.Forward;
+                        break;
 
-                case MotionEvent.ACTION_UP:
-                    //Toast.makeText(getApplicationContext(), "Button FORWARD up", Toast.LENGTH_LONG).show();
-                    forwardButton.animate().scaleX(1);
-                    forwardButton.animate().scaleY(1);
-                    //forwardButton.clearAnimation();
-                    forwardButton.setColorFilter(Color.alpha(0));
-                    controlTextView.setText("IDLE");
-                    customCharacteristic.setValue("@M00");
-                    bluetoothGatt.writeCharacteristic(customCharacteristic);
-                    break;
+                    case MotionEvent.ACTION_UP:
+                        //Toast.makeText(getApplicationContext(), "Button FORWARD up", Toast.LENGTH_LONG).show();
+                        forwardButton.animate().scaleX(1);
+                        forwardButton.animate().scaleY(1);
+                        //forwardButton.clearAnimation();
+                        forwardButton.setColorFilter(Color.alpha(0));
+                        controlTextView.setText("IDLE");
+                        customCharacteristic.setValue("@M00");
+                        bluetoothGatt.writeCharacteristic(customCharacteristic);
+                        prevState = MovingState.Idle;
+                        break;
                 }
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "ROBOT not connected", Toast.LENGTH_SHORT).show();
+            }
+
             return false;
         }
     };
-
-
 
 
     //REVERSE LISTENER
     private View.OnTouchListener buttonReverseListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            switch(event.getAction()){
-                case MotionEvent.ACTION_DOWN:
-                    reverseButton.animate().scaleX(1.1f);
-                    reverseButton.animate().scaleY(1.1f);
-                    reverseButton.setColorFilter(Color.argb(100, 0,255,0));
-                    //Toast.makeText(getApplicationContext(), "Button REVERSE down", Toast.LENGTH_LONG).show();
-                    controlTextView.setText("REVERSE");
-                    customCharacteristic.setValue("@MB0");
-                    bluetoothGatt.writeCharacteristic(customCharacteristic);
-                    break;
+            if(connection){
+                switch(event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        reverseButton.animate().scaleX(1.1f);
+                        reverseButton.animate().scaleY(1.1f);
+                        reverseButton.setColorFilter(Color.argb(100, 0,255,0));
+                        //Toast.makeText(getApplicationContext(), "Button REVERSE down", Toast.LENGTH_LONG).show();
+                        controlTextView.setText("REVERSE");
+                        customCharacteristic.setValue("@MB0");
+                        bluetoothGatt.writeCharacteristic(customCharacteristic);
+                        prevState = MovingState.Reverse;
+                        break;
 
-                case MotionEvent.ACTION_UP:
-                    reverseButton.animate().scaleX(1);
-                    reverseButton.animate().scaleY(1);
-                    reverseButton.setColorFilter(Color.alpha(0));
-                    //Toast.makeText(getApplicationContext(), "Button REVERSE up", Toast.LENGTH_LONG).show();
-                    controlTextView.setText("IDLE");
-                    customCharacteristic.setValue("@M00");
-                    bluetoothGatt.writeCharacteristic(customCharacteristic);
-                    break;
+                    case MotionEvent.ACTION_UP:
+                        reverseButton.animate().scaleX(1);
+                        reverseButton.animate().scaleY(1);
+                        reverseButton.setColorFilter(Color.alpha(0));
+                        //Toast.makeText(getApplicationContext(), "Button REVERSE up", Toast.LENGTH_LONG).show();
+                        controlTextView.setText("IDLE");
+                        customCharacteristic.setValue("@M00");
+                        bluetoothGatt.writeCharacteristic(customCharacteristic);
+                        prevState = MovingState.Idle;
+                        break;
+                }
             }
+            else{
+                Toast.makeText(getApplicationContext(), "ROBOT not connected", Toast.LENGTH_SHORT).show();
+            }
+
             return false;
         }
     };
@@ -244,27 +269,34 @@ public class RemoteControlActivity extends AppCompatActivity {
     private View.OnTouchListener buttonRightListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            switch(event.getAction()){
-                case MotionEvent.ACTION_DOWN:
-                    rightButton.animate().scaleX(1.1f);
-                    rightButton.animate().scaleY(1.1f);
-                    rightButton.setColorFilter(Color.argb(100, 0,255,0));
-                    //Toast.makeText(getApplicationContext(), "Button RIGHT down", Toast.LENGTH_LONG).show();
-                    controlTextView.setText("RIGHT");
-                    customCharacteristic.setValue("@MR0");
-                    bluetoothGatt.writeCharacteristic(customCharacteristic);
-                    break;
+            if(connection){
+                switch(event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        rightButton.animate().scaleX(1.1f);
+                        rightButton.animate().scaleY(1.1f);
+                        rightButton.setColorFilter(Color.argb(100, 0,255,0));
+                        //Toast.makeText(getApplicationContext(), "Button RIGHT down", Toast.LENGTH_LONG).show();
+                        controlTextView.setText("RIGHT");
+                        customCharacteristic.setValue("@MR0");
+                        bluetoothGatt.writeCharacteristic(customCharacteristic);
+                        break;
 
-                case MotionEvent.ACTION_UP:
-                    rightButton.animate().scaleX(1);
-                    rightButton.animate().scaleY(1);
-                    rightButton.setColorFilter(Color.alpha(0));
-                    //Toast.makeText(getApplicationContext(), "Button RIGHT up", Toast.LENGTH_LONG).show();
-                    controlTextView.setText("IDLE");
-                    customCharacteristic.setValue("@M00");
-                    bluetoothGatt.writeCharacteristic(customCharacteristic);
-                    break;
+                    case MotionEvent.ACTION_UP:
+                        rightButton.animate().scaleX(1);
+                        rightButton.animate().scaleY(1);
+                        rightButton.setColorFilter(Color.alpha(0));
+                        ProcessPreviousState();
+                        //Toast.makeText(getApplicationContext(), "Button RIGHT up", Toast.LENGTH_LONG).show();
+//                    controlTextView.setText("IDLE");
+//                    customCharacteristic.setValue("@M00");
+//                    bluetoothGatt.writeCharacteristic(customCharacteristic);
+                        break;
+                }
             }
+            else{
+                Toast.makeText(getApplicationContext(), "ROBOT not connected", Toast.LENGTH_SHORT).show();
+            }
+
             return false;
         }
     };
@@ -274,28 +306,75 @@ public class RemoteControlActivity extends AppCompatActivity {
     private View.OnTouchListener buttonLeftListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            switch(event.getAction()){
-                case MotionEvent.ACTION_DOWN:
-                    leftButton.animate().scaleX(1.1f);
-                    leftButton.animate().scaleY(1.1f);
-                    leftButton.setColorFilter(Color.argb(100, 0,255,0));
-                    //Toast.makeText(getApplicationContext(), "Button LEFT down", Toast.LENGTH_LONG).show();
-                    controlTextView.setText("LEFT");
-                    customCharacteristic.setValue("@ML0");
-                    bluetoothGatt.writeCharacteristic(customCharacteristic);
-                    break;
+            if(connection){
+                switch(event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        leftButton.animate().scaleX(1.1f);
+                        leftButton.animate().scaleY(1.1f);
+                        leftButton.setColorFilter(Color.argb(100, 0,255,0));
+                        //Toast.makeText(getApplicationContext(), "Button LEFT down", Toast.LENGTH_LONG).show();
+                        controlTextView.setText("LEFT");
+                        customCharacteristic.setValue("@ML0");
+                        bluetoothGatt.writeCharacteristic(customCharacteristic);
+                        break;
 
-                case MotionEvent.ACTION_UP:
-                    leftButton.animate().scaleX(1);
-                    leftButton.animate().scaleY(1);
-                    leftButton.setColorFilter(Color.alpha(0));
-                    //Toast.makeText(getApplicationContext(), "Button LEFT up", Toast.LENGTH_LONG).show();
-                    controlTextView.setText("IDLE");
-                    customCharacteristic.setValue("@M00");
-                    bluetoothGatt.writeCharacteristic(customCharacteristic);
-                    break;
+                    case MotionEvent.ACTION_UP:
+                        leftButton.animate().scaleX(1);
+                        leftButton.animate().scaleY(1);
+                        leftButton.setColorFilter(Color.alpha(0));
+                        ProcessPreviousState();
+                        //Toast.makeText(getApplicationContext(), "Button LEFT up", Toast.LENGTH_LONG).show();
+//                    controlTextView.setText("IDLE");
+//                    customCharacteristic.setValue("@M00");
+//                    bluetoothGatt.writeCharacteristic(customCharacteristic);
+                        break;
+                }
             }
+            else{
+                Toast.makeText(getApplicationContext(), "ROBOT not connected", Toast.LENGTH_SHORT).show();
+            }
+
             return false;
         }
     };
+
+    void ProcessPreviousState() {
+
+
+        switch(prevState){
+
+            case Idle:
+                customCharacteristic.setValue("@M00");
+                bluetoothGatt.writeCharacteristic(customCharacteristic);
+                controlTextView.setText("IDLE");
+                break;
+
+            case Forward:
+                customCharacteristic.setValue("@MF0");
+                bluetoothGatt.writeCharacteristic(customCharacteristic);
+                controlTextView.setText("FORWARD");
+                break;
+
+            case Reverse:
+                customCharacteristic.setValue("@MB0");
+                bluetoothGatt.writeCharacteristic(customCharacteristic);
+                controlTextView.setText("REVERSE");
+
+//            case Left:
+//                customCharacteristic.setValue("@ML0");
+//                bluetoothGatt.writeCharacteristic(customCharacteristic);
+//                controlTextView.setText("LEFT");
+//                break;
+//
+//            case Right:
+//                customCharacteristic.setValue("@MR0");
+//                bluetoothGatt.writeCharacteristic(customCharacteristic);
+//                controlTextView.setText("RIGHT");
+//                break;
+
+            default:
+                break;
+        }
+    }
+
 }
