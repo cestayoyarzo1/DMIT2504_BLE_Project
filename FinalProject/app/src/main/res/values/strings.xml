@@ -6,7 +6,7 @@
     <string name="activity_remote_control_up_button">UP</string>
     <string name="activity_remote_control_title">REMOTE CONTROL</string>
     <string name="activity_remote_control_status_textview">Idle</string>
-    <string name="activity_main_title_text">No device connected. Press button to scan a device</string>
+    <string name="activity_main_scan_filter">Enter name to filter scan </string>
     <string name="main_menu_control"> Control</string>
     <string name="listview_item_name">NAME</string>
     <string name="listview_item_address">ADDRESS</string>

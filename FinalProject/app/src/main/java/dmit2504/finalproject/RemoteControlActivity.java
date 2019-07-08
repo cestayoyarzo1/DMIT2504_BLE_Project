@@ -18,7 +18,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,41 +30,59 @@ public class RemoteControlActivity extends AppCompatActivity {
 
     SeekBar speedSeekBar;
 
-    TextView statusTextView;
+    TextView titleTextView;
+    TextView controlTextView;
 
     BluetoothDevice robot, replyingRobot;
 
     BluetoothGatt bluetoothGatt;
     BluetoothGattCharacteristic customCharacteristic;
 
+    boolean connection;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remote_control);
+        getSupportActionBar().setTitle("Remote Control");
+
+        controlTextView = findViewById(R.id.activity_remote_control_control_textview);
+        titleTextView = findViewById(R.id.activity_remote_control_title_textview);
+
         forwardButton = findViewById(R.id.activity_remote_control_forward_button);
         reverseButton = findViewById(R.id.activity_remote_control_reverse_button);
         rightButton = findViewById(R.id.activity_remote_control_right_button);
         leftButton = findViewById(R.id.activity_remote_control_left_button);
         speedSeekBar = findViewById(R.id.activity_remote_control_bar);
 
-        statusTextView = findViewById(R.id.activity_remote_control_status_textview);
+
 
         forwardButton.setOnTouchListener(buttonForwardListener);
         reverseButton.setOnTouchListener(buttonReverseListener);
         rightButton.setOnTouchListener(buttonRightListener);
         leftButton.setOnTouchListener(buttonLeftListener);
+
         speedSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
         speedSeekBar.setProgress(speedSeekBar.getMax()/2);
 
         robot = getIntent().getParcelableExtra("ROBOT");
+
         if(robot != null){
-            Toast.makeText(this, "Remote device Connected: " + robot.getName(), Toast.LENGTH_LONG);
+            Toast.makeText(this, "Remote device Connected: " + robot.getName(), Toast.LENGTH_LONG).show();
             bluetoothGatt = robot.connectGatt(getActivity(), false, gattCallback);
+            titleTextView.setText("Connected to " + robot.getName());
+            titleTextView.setTextColor(getResources().getColor(R.color.dark_green));
+
+            connection = true;
+
         }
         else{
             Toast.makeText(this, "Nothing to control", Toast.LENGTH_LONG);
+            titleTextView.setText("Robot not connected");
+            titleTextView.setTextColor(getResources().getColor(R.color.red));
+            connection = false;
         }
-
     }
 
     private RemoteControlActivity getActivity() {
@@ -83,7 +100,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                 case BluetoothProfile.STATE_CONNECTED:
                     Snackbar.make(findViewById(android.R.id.content), "Connected to " + replyingRobot.getName(), Snackbar.LENGTH_LONG).setAction("No action", null).show();
                     //Toast.makeText(getApplicationContext(), "Connected to " + connectedDevice.getName(), Toast.LENGTH_LONG).show();
-                    statusTextView.setText("Connected to " + replyingRobot.getName());
+                    titleTextView.setText("Connected to " + replyingRobot.getName());
                     bluetoothGatt.discoverServices();
                     break;
 
@@ -110,9 +127,6 @@ public class RemoteControlActivity extends AppCompatActivity {
             List<BluetoothGattService> services = gatt.getServices();
             BluetoothGattService service = gatt.getService(UUID.fromString(serviceUUID));
             customCharacteristic = service.getCharacteristic(UUID.fromString(charUUID));
-//            customCharacteristic =
-//                    gatt.getService(UUID.fromString(serviceUUID))
-//                            .getCharacteristic(UUID.fromString(charUUID));
             if (customCharacteristic == null) {
                 Snackbar.make(findViewById(android.R.id.content), "Characteristic not found", Snackbar.LENGTH_LONG).setAction("No action", null).show();
             }
@@ -150,7 +164,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     forwardButton.animate().scaleY(1.1f);
                     forwardButton.setColorFilter(Color.argb(100, 0,255,0));
                     //Toast.makeText(getApplicationContext(), "Button FORWARD down", Toast.LENGTH_LONG).show();
-                    statusTextView.setText("FORWARD");
+                    controlTextView.setText("FORWARD");
                     customCharacteristic.setValue("@MF0");
                     bluetoothGatt.writeCharacteristic(customCharacteristic);
                     break;
@@ -161,7 +175,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     forwardButton.animate().scaleY(1);
                     //forwardButton.clearAnimation();
                     forwardButton.setColorFilter(Color.alpha(0));
-                    statusTextView.setText("IDLE");
+                    controlTextView.setText("IDLE");
                     customCharacteristic.setValue("@M00");
                     bluetoothGatt.writeCharacteristic(customCharacteristic);
                     break;
@@ -201,7 +215,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     reverseButton.animate().scaleY(1.1f);
                     reverseButton.setColorFilter(Color.argb(100, 0,255,0));
                     //Toast.makeText(getApplicationContext(), "Button REVERSE down", Toast.LENGTH_LONG).show();
-                    statusTextView.setText("REVERSE");
+                    controlTextView.setText("REVERSE");
                     customCharacteristic.setValue("@MB0");
                     bluetoothGatt.writeCharacteristic(customCharacteristic);
                     break;
@@ -211,7 +225,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     reverseButton.animate().scaleY(1);
                     reverseButton.setColorFilter(Color.alpha(0));
                     //Toast.makeText(getApplicationContext(), "Button REVERSE up", Toast.LENGTH_LONG).show();
-                    statusTextView.setText("IDLE");
+                    controlTextView.setText("IDLE");
                     customCharacteristic.setValue("@M00");
                     bluetoothGatt.writeCharacteristic(customCharacteristic);
                     break;
@@ -229,7 +243,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     rightButton.animate().scaleY(1.1f);
                     rightButton.setColorFilter(Color.argb(100, 0,255,0));
                     //Toast.makeText(getApplicationContext(), "Button RIGHT down", Toast.LENGTH_LONG).show();
-                    statusTextView.setText("RIGHT");
+                    controlTextView.setText("RIGHT");
                     customCharacteristic.setValue("@MR0");
                     bluetoothGatt.writeCharacteristic(customCharacteristic);
                     break;
@@ -239,7 +253,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     rightButton.animate().scaleY(1);
                     rightButton.setColorFilter(Color.alpha(0));
                     //Toast.makeText(getApplicationContext(), "Button RIGHT up", Toast.LENGTH_LONG).show();
-                    statusTextView.setText("IDLE");
+                    controlTextView.setText("IDLE");
                     customCharacteristic.setValue("@M00");
                     bluetoothGatt.writeCharacteristic(customCharacteristic);
                     break;
@@ -257,7 +271,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     leftButton.animate().scaleY(1.1f);
                     leftButton.setColorFilter(Color.argb(100, 0,255,0));
                     //Toast.makeText(getApplicationContext(), "Button LEFT down", Toast.LENGTH_LONG).show();
-                    statusTextView.setText("LEFT");
+                    controlTextView.setText("LEFT");
                     customCharacteristic.setValue("@ML0");
                     bluetoothGatt.writeCharacteristic(customCharacteristic);
                     break;
@@ -267,7 +281,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     leftButton.animate().scaleY(1);
                     leftButton.setColorFilter(Color.alpha(0));
                     //Toast.makeText(getApplicationContext(), "Button LEFT up", Toast.LENGTH_LONG).show();
-                    statusTextView.setText("IDLE");
+                    controlTextView.setText("IDLE");
                     customCharacteristic.setValue("@M00");
                     bluetoothGatt.writeCharacteristic(customCharacteristic);
                     break;

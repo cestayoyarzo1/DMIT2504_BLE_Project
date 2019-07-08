@@ -31,13 +31,10 @@ public class LeDeviceListAdapter extends BaseAdapter {
         }
     }
 
-
     public void addResult(ScanResult result) {
         mLeDeviceList.add((result));
         notifyDataSetChanged();
     }
-
-
 
 
     @Override

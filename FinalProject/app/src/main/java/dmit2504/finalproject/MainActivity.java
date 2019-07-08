@@ -17,6 +17,7 @@ import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -33,7 +34,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,9 +44,6 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothGattServer bluetoothGattServer;
     private boolean mScanning;
     private Handler handler;
-    //private TextView bleTopText;
-    //private ArrayAdapter<String> leAdapter;
-    private boolean mCharacteristicWritten = true;
 
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 20000;
@@ -67,22 +64,24 @@ public class MainActivity extends AppCompatActivity {
     BluetoothGatt bluetoothGatt;
     private BluetoothGattCharacteristic customCharacteristic;
 
-    TextView directionTextView;
+    TextView scanFilterTextView;
+
+    static final String SEARCH_TAG = "Robot";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setTitle(APP_NAME);
+
         statusTextView = findViewById(R.id.activity_main_status_text);
         statusTextView.setText("");
-
-        getSupportActionBar().setTitle(APP_NAME);
 
         devicesListView = findViewById(R.id.activity_main_devices_listview);
         deviceListAdapter = new LeDeviceListAdapter(this);
         devicesListView.setAdapter(deviceListAdapter);
 
-        directionTextView = findViewById(R.id.activity_main_direction_input);
+        scanFilterTextView = findViewById(R.id.activity_main_scan_filter);
 
 
         //setContentView(R.layout.activity_device_scan);
@@ -127,12 +126,11 @@ public class MainActivity extends AppCompatActivity {
 //                builder.show();
             }
         }
-
         //scanLeDevice(true);
     }
 
-    //Main Menu Loading
 
+    //Main Menu Loading
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Create an instance of the Menu inflater
@@ -173,9 +171,10 @@ public class MainActivity extends AppCompatActivity {
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
             //Toast.makeText(getApplicationContext(), "Device Found", Toast.LENGTH_SHORT).show();
-            if (result.getDevice().getName() != null && !deviceListAdapter.contains(result)) {
-                deviceListAdapter.addResult(result);//add found device to the listview
-
+            if (result.getDevice().getName() != null && result.getDevice().getName().contains(scanFilterTextView.getText())) {
+                if(!deviceListAdapter.contains(result)){
+                    deviceListAdapter.addResult(result);//add found device to the listView if not already added
+                }
                 //register event for clicking items
                 devicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -184,8 +183,9 @@ public class MainActivity extends AppCompatActivity {
                         robotDevice = selectedResult.getDevice();
                         //Toast.makeText(getApplicationContext(), "Clicked on device:" + robotDevice.getName(), Toast.LENGTH_SHORT).show();
                         bluetoothGatt = robotDevice.connectGatt(getActivity(), false, gattCallback);
+                        //Stop Scanning if connecting to a device
+                        scanLeDevice(false);
                         statusTextView.setText("Connecting to " + robotDevice.getName() + "...");
-
                     }
                 });
             }
@@ -253,6 +253,10 @@ public class MainActivity extends AppCompatActivity {
             }
             else{
                 Snackbar.make(findViewById(android.R.id.content), "Characteristic: " + customCharacteristic.getInstanceId(), Snackbar.LENGTH_LONG).setAction("No action", null).show();
+                //Robot connected, open remote control activity
+                Intent intent = new Intent(getApplicationContext(), RemoteControlActivity.class);
+                intent.putExtra("ROBOT", robotDevice);
+                startActivity(intent);
             }
         }
 
@@ -308,22 +312,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onSendDirection(View view){
-        if(customCharacteristic != null) {
-            String value = directionTextView.getText().toString();
-            Toast.makeText(this, "You are sending :" + value, Toast.LENGTH_LONG).show();
-            customCharacteristic.setValue(value);
-            bluetoothGatt.writeCharacteristic(customCharacteristic);
-            Intent intent = new Intent(this, RemoteControlActivity.class);
-            intent.putExtra("ROBOT", robotDevice);
-            startActivity(intent);
-        }
-//        String value = directionTextView.getText().toString();
-//        Toast.makeText(this, "You are sending :" + value, Toast.LENGTH_LONG).show();
-//        customCharacteristic.setValue(value);
-//        bluetoothGatt.writeCharacteristic(customCharacteristic);
-//        Intent intent = new Intent(this, RemoteControlActivity.class);
-//        intent.putExtra("ROBOT", robotDevice);
-//        startActivity(intent);
-    }
 }

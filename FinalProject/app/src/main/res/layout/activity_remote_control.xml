@@ -2,12 +2,13 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/remote_control_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:backgroundTint="#000000">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/activity_remote_control_title_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -90,7 +91,7 @@
         app:srcCompat="@mipmap/buttonright" />
 
     <TextView
-        android:id="@+id/activity_remote_control_status_textview"
+        android:id="@+id/activity_remote_control_control_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -99,7 +100,7 @@
         android:text="@string/activity_remote_control_status_textview"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="@android:color/holo_red_dark"
+        android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toTopOf="@+id/activity_remote_control_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
