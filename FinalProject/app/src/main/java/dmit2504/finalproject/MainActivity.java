@@ -17,9 +17,10 @@ import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -108,24 +109,25 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
 
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Please grant location access so this app can detect peripherals.", Toast.LENGTH_SHORT).show();
-//                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//                builder.setTitle("This app needs location access");
-//                builder.setMessage("Please grant location access so this app can detect peripherals.");
-//                builder.setPositiveButton(android.R.string.ok, null);
-//                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//                    @RequiresApi(api = Build.VERSION_CODES.M)
-//                    @Override
-//                    public void onDismiss(DialogInterface dialog) {
-//                        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, Integer.parseInt(Manifest.permission.ACCESS_COARSE_LOCATION));
-//                    }
-//                });
-//                builder.show();
+        //Check and request permission if necessary
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        1);
+                // result of the request.
             }
+        } else {
+            // Permission has already been granted
         }
-        //scanLeDevice(true);
+
     }
 
 
@@ -206,6 +208,8 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
+
+
     //Gatt Callback
     private final BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
         @Override
@@ -237,15 +241,14 @@ public class MainActivity extends AppCompatActivity {
             //super.onServicesDiscovered(gatt, status);
             Snackbar.make(findViewById(android.R.id.content), "Services discovered", Snackbar.LENGTH_LONG).setAction("No action", null).show();
 
+            List<BluetoothGattService> services = gatt.getServices();
+
             String serviceUUID = "D973f2E0-B19E-11E2-9E96-0800200C9A66";
             String charUUID = "D973f2E2-B19E-11E2-9E96-0800200C9A66";
 
-            List<BluetoothGattService> services = gatt.getServices();
             BluetoothGattService service = gatt.getService(UUID.fromString(serviceUUID));
             customCharacteristic = service.getCharacteristic(UUID.fromString(charUUID));
-//            customCharacteristic =
-//                    gatt.getService(UUID.fromString(serviceUUID))
-//                            .getCharacteristic(UUID.fromString(charUUID));
+
             if (customCharacteristic == null) {
                 Snackbar.make(findViewById(android.R.id.content), "Characteristic not found", Snackbar.LENGTH_LONG).setAction("No action", null).show();
             }
@@ -281,8 +284,6 @@ public class MainActivity extends AppCompatActivity {
     private void scanLeDevice(final boolean enable) {
 
         final BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
-        //        leAdapter.clear();
-        //        leAdapter.notifyDataSetChanged();
         if (enable) {
             statusTextView.setText("Scanning...");
             // Stops scanning after a pre-defined scan period.
