@@ -170,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
-            //Toast.makeText(getApplicationContext(), "Device Found", Toast.LENGTH_SHORT).show();
             if (result.getDevice().getName() != null && result.getDevice().getName().contains(scanFilterTextView.getText())) {
                 if(!deviceListAdapter.contains(result)){
                     deviceListAdapter.addResult(result);//add found device to the listView if not already added
@@ -181,7 +180,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         ScanResult selectedResult = (ScanResult) deviceListAdapter.getItem(position);
                         robotDevice = selectedResult.getDevice();
-                        //Toast.makeText(getApplicationContext(), "Clicked on device:" + robotDevice.getName(), Toast.LENGTH_SHORT).show();
                         bluetoothGatt = robotDevice.connectGatt(getActivity(), false, gattCallback);
                         //Stop Scanning if connecting to a device
                         scanLeDevice(false);
