@@ -14,4 +14,5 @@
     <string name="listview_item_data">DATA</string>
     <string name="activity_main_direction_text">Direction</string>
     <string name="activity_main_send_button">SEND</string>
+    <string name="activity_remote_control_speed_textview">Speed:</string>
 </resources>

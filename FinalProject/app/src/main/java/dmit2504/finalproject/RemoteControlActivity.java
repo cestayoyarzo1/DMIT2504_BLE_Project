@@ -32,6 +32,7 @@ public class RemoteControlActivity extends AppCompatActivity {
 
     TextView titleTextView;
     TextView controlTextView;
+    TextView speedTextview;
 
     BluetoothDevice robot, replyingRobot;
 
@@ -49,14 +50,13 @@ public class RemoteControlActivity extends AppCompatActivity {
 
         controlTextView = findViewById(R.id.activity_remote_control_control_textview);
         titleTextView = findViewById(R.id.activity_remote_control_title_textview);
+        speedTextview = findViewById(R.id.activity_remote_control_speed_textview);
 
         forwardButton = findViewById(R.id.activity_remote_control_forward_button);
         reverseButton = findViewById(R.id.activity_remote_control_reverse_button);
         rightButton = findViewById(R.id.activity_remote_control_right_button);
         leftButton = findViewById(R.id.activity_remote_control_left_button);
         speedSeekBar = findViewById(R.id.activity_remote_control_bar);
-
-
 
         forwardButton.setOnTouchListener(buttonForwardListener);
         reverseButton.setOnTouchListener(buttonReverseListener);
@@ -154,7 +154,30 @@ public class RemoteControlActivity extends AppCompatActivity {
     };
 
 
+    //SPEED LISTENER
+    private SeekBar.OnSeekBarChangeListener seekBarChangeListener =  new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            //Toast.makeText(getApplicationContext(), "Speed: " + progress + "0%", Toast.LENGTH_SHORT).show();
+            speedTextview.setText("Speed: " + progress + "0%");
+            if(robot != null){
+                customCharacteristic.setValue("@S" + String.format("%02d",progress));
+                bluetoothGatt.writeCharacteristic(customCharacteristic);
+            }
+        }
 
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    };
+
+    //FORWARD LISTENER
     private View.OnTouchListener buttonForwardListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -185,27 +208,9 @@ public class RemoteControlActivity extends AppCompatActivity {
     };
 
 
-    private SeekBar.OnSeekBarChangeListener seekBarChangeListener =  new SeekBar.OnSeekBarChangeListener() {
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            Toast.makeText(getApplicationContext(), "Speed: " + progress + "0%", Toast.LENGTH_SHORT).show();
-            if(robot != null){
-                customCharacteristic.setValue("@S" + String.format("%02d",progress));
-                bluetoothGatt.writeCharacteristic(customCharacteristic);
-            }
-        }
 
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
 
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-
-        }
-    };
-
+    //REVERSE LISTENER
     private View.OnTouchListener buttonReverseListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -234,6 +239,8 @@ public class RemoteControlActivity extends AppCompatActivity {
         }
     };
 
+
+    //RIGHT LISTENER
     private View.OnTouchListener buttonRightListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -262,6 +269,8 @@ public class RemoteControlActivity extends AppCompatActivity {
         }
     };
 
+
+    //LEFT LISTENER
     private View.OnTouchListener buttonLeftListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
