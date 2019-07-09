@@ -1,4 +1,8 @@
 /* USER CODE BEGIN Header */
+/*Edited by Carlos Estay
+July 6th, 2019*/
+
+
 /**
   ******************************************************************************
   * @file           : main.c
@@ -22,7 +26,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "app_x-cube-ble1.h"
-#include "robot.h"
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -161,14 +165,6 @@ void Clock()
   RCC->CFGR |= RCC_CFGR_MCOSEL_0;       //SysCLK as MCO = 80 Mhz
   RCC->CFGR |= RCC_CFGR_MCO_PRE_16;       // MCO / 16 = 5 Mhz
     
-  /*
-  // USB clocks begin
-  RCC->PLLSAI1CFGR = 0x00101800;        //TODO Expand this
-  RCC->CR |= RCC_CR_PLLSAI1ON;          //Turn On PLLSAI1
-  while(!(RCC->CR & RCC_CR_PLLSAI1RDY));//Wait until PLLSAI1 is stable
-  RCC->CCIPR |= RCC_CCIPR_CLK48SEL_0;
-  // USB clocks end
-  */
   
   RCC->CR |= RCC_CR_PLLON;              //Turn On PLL
   while(!RCC->CR & RCC_CR_PLLRDY);      //Wait until PLL is locked
@@ -192,18 +188,8 @@ void Clock()
   RCC->APB1ENR1 |= RCC_APB1ENR1_TIM4EN; // Enable TIMER 4
   
   
-  
-  /*
-  GPIOC->MODER &= ~GPIO_MODER_MODER0;
-  GPIOC->MODER |= GPIO_MODER_MODER0_0;
-  //GPIOC->BSRR |= GPIO_BSRR_BS_0;
-  GPIOC->BRR |= GPIO_BRR_BR_0;
-  */
-  
   GPIOC->MODER &= ~GPIO_MODER_MODER0;
   GPIOC->MODER |= GPIO_MODER_MODER0;
-  //GPIOC->BSRR |= GPIO_BSRR_BS_0;
-  //GPIOC->BRR |= GPIO_BRR_BR_0;
 }
 
 //Timers------------------------------------------------------------------------
@@ -222,7 +208,6 @@ void Timers()
   GPIOC->AFR[1] |= 2<<4;                        //AF2
   
   //Timer Configuration
-  
   TIM3->CR1 &= ~TIM_CR1_CEN;            // Stop Timer
   TIM3->PSC = 40-1;                     // Prescale clock to 2Mhz freq.
   TIM3->ARR = 1000;                     // PWM frequency 2Mhz / 1000 (period) = 2Khz
@@ -253,7 +238,6 @@ void Timers()
   GPIOB->AFR[1] |= 2<<4;                        //AF2 
   
   //Timer Configuration
-  
   TIM4->CR1 &= ~TIM_CR1_CEN;            // Stop Timer
   TIM4->PSC = 40-1;                     // Prescale clock to 2Mhz freq.
   TIM4->ARR = 1000;                     // PWM frequency 2Mhz / 1000 (period) = 2Khz
@@ -270,7 +254,6 @@ void Timers()
   
   TIM4->EGR |= TIM_EGR_UG;            // Enable register update
   TIM4->CR1 |= TIM_CR1_CEN;            // Start timer  
-  
 }
 
 //Uart--------------------------------------------------------------------------

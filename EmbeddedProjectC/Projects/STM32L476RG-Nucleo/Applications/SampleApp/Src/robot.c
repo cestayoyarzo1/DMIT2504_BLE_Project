@@ -1,6 +1,7 @@
 /*
-  FILE: motionControl.cpp
+  FILE: robot.cpp
   Created on: 6/24/2019, by Carlos Estay
+  carlos.estayo@gmail.com
 */
 
 

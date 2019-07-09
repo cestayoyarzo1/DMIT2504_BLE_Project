@@ -171,7 +171,7 @@ void Make_Connection(void)
     /* disable scan response */
     hci_le_set_scan_resp_data(0,NULL);
     
-    PRINTF("General Discoverable Mode\n\r ");
+    PRINTF("\n\rGeneral Discoverable Mode ");
     /*
     Advertising_Event_Type, Adv_Interval_Min, Adv_Interval_Max, Address_Type, Adv_Filter_Policy,
     Local_Name_Length, Local_Name, Service_Uuid_Length, Service_Uuid_List, Slave_Conn_Interval_Min,
@@ -224,9 +224,14 @@ void startReadRXCharHandle(void)
  * @param  Nb_bytes : number of bytes to be received
  * @retval None
  */
+
+uint8_t testBuffer[128];
+
 void receiveData(uint8_t* data_buffer, uint8_t Nb_bytes)
 {
   BSP_LED_Toggle(LED2);
+  
+  memcpy(testBuffer,data_buffer, Nb_bytes);
 
   for(int i = 0; i < Nb_bytes; i++) {
     printf("%c", data_buffer[i]);
@@ -297,7 +302,7 @@ void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle)
   connected = TRUE;
   connection_handle = handle;
   
-  printf("Connected to device:");
+  printf("\n\rConnected to device:");
   for(int i = 5; i > 0; i--){
     printf("%02X-", addr[i]);
   }
@@ -311,9 +316,10 @@ void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle)
  */
 void GAP_DisconnectionComplete_CB(void)
 {
+  Robot_Stop();
   connected = FALSE;
   
-  printf("Disconnected\n");
+  printf("\n\rDisconnected");
   /* Make the device connectable again. */
   set_connectable = TRUE;
   notification_enabled = FALSE;

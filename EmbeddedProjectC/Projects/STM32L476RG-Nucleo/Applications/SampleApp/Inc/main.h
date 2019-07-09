@@ -1,4 +1,6 @@
 /* USER CODE BEGIN Header */
+/*Edited by Carlos Estay
+July 6th, 2019*/
 /**
   ******************************************************************************
   * @file           : main.h
@@ -37,7 +39,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l4xx_hal.h"
-
+#include "robot.h"
 #include "hci_tl_interface.h"
 #include "stm32l4xx_nucleo.h"
 /* Private includes ----------------------------------------------------------*/
