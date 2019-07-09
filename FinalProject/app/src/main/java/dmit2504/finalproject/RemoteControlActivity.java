@@ -107,20 +107,22 @@ public class RemoteControlActivity extends AppCompatActivity {
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             //super.onConnectionStateChange(gatt, status, newState);
             robot = gatt.getDevice();
+            String robotName = robot.getName();
             switch(newState ){
                 case BluetoothProfile.STATE_CONNECTED:
-                    Snackbar.make(findViewById(android.R.id.content), "Connected to " + robot.getName(), Snackbar.LENGTH_LONG).setAction("No action", null).show();
+                    Snackbar.make(findViewById(android.R.id.content), "Connected to " + robotName, Snackbar.LENGTH_LONG).setAction("No action", null).show();
                     //Toast.makeText(getApplicationContext(), "Connected to " + connectedDevice.getName(), Toast.LENGTH_LONG).show();
-                    titleTextView.setText("Connected to " + robot.getName());
+                    titleTextView.setText("Connected to " + robotName);
                     titleTextView.setTextColor(getResources().getColor(R.color.dark_green));
                     connection = true;
                     bluetoothGatt.discoverServices();
                     break;
 
                 case BluetoothProfile.STATE_DISCONNECTED:
-                    Snackbar.make(findViewById(android.R.id.content), "Disconnected from " + robot.getName(), Snackbar.LENGTH_LONG).setAction("No action", null).show();
-                    titleTextView.setText("Robot Disconnected");
                     titleTextView.setTextColor(getResources().getColor(R.color.red));
+                    Snackbar.make(findViewById(android.R.id.content), "Disconnected from " + robotName, Snackbar.LENGTH_LONG).setAction("No action", null).show();
+                    titleTextView.setText("Robot Disconnected");
+
                     connection = false;
                     //Try to reconnect
                     robot.connectGatt(getActivity(), true, gattCallback);
@@ -225,7 +227,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                 }
             }
             else{
-                Toast.makeText(getApplicationContext(), "ROBOT not connected", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "ROBOT not connected", Toast.LENGTH_SHORT).show();
             }
 
             return false;
@@ -263,7 +265,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                 }
             }
             else{
-                Toast.makeText(getApplicationContext(), "ROBOT not connected", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "ROBOT not connected", Toast.LENGTH_SHORT).show();
             }
 
             return false;
@@ -300,7 +302,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                 }
             }
             else{
-                Toast.makeText(getApplicationContext(), "ROBOT not connected", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "ROBOT not connected", Toast.LENGTH_SHORT).show();
             }
 
             return false;
@@ -337,7 +339,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                 }
             }
             else{
-                Toast.makeText(getApplicationContext(), "ROBOT not connected", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "ROBOT not connected", Toast.LENGTH_SHORT).show();
             }
 
             return false;
