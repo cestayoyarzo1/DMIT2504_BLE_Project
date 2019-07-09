@@ -114,7 +114,6 @@ public class RemoteControlActivity extends AppCompatActivity {
                     //Toast.makeText(getApplicationContext(), "Connected to " + connectedDevice.getName(), Toast.LENGTH_LONG).show();
                     titleTextView.setText("Connected to " + robotName);
                     titleTextView.setTextColor(getResources().getColor(R.color.dark_green));
-                    connection = true;
                     bluetoothGatt.discoverServices();
                     break;
 
@@ -122,7 +121,6 @@ public class RemoteControlActivity extends AppCompatActivity {
                     titleTextView.setTextColor(getResources().getColor(R.color.red));
                     Snackbar.make(findViewById(android.R.id.content), "Disconnected from " + robotName, Snackbar.LENGTH_LONG).setAction("No action", null).show();
                     titleTextView.setText("Robot Disconnected");
-
                     connection = false;
                     //Try to reconnect
                     robot.connectGatt(getActivity(), true, gattCallback);
@@ -151,6 +149,7 @@ public class RemoteControlActivity extends AppCompatActivity {
             }
             else{
                 Snackbar.make(findViewById(android.R.id.content), "Characteristic: " + customCharacteristic.getInstanceId(), Snackbar.LENGTH_LONG).setAction("No action", null).show();
+                connection = true;
             }
         }
 
