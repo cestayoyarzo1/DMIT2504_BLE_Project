@@ -34,7 +34,7 @@ public class RemoteControlActivity extends AppCompatActivity {
     TextView controlTextView;
     TextView speedTextview;
 
-    BluetoothDevice robot, replyingRobot;
+    BluetoothDevice robot;
 
     BluetoothGatt bluetoothGatt;
     BluetoothGattCharacteristic customCharacteristic;
@@ -80,7 +80,7 @@ public class RemoteControlActivity extends AppCompatActivity {
 
         if(robot != null){
             Toast.makeText(this, "Remote device Connected: " + robot.getName(), Toast.LENGTH_SHORT).show();
-            bluetoothGatt = robot.connectGatt(getActivity(), false, gattCallback);
+            bluetoothGatt = robot.connectGatt(getActivity(), true, gattCallback);
             titleTextView.setText("Connected to " + robot.getName());
             titleTextView.setTextColor(getResources().getColor(R.color.dark_green));
             connection = true;
@@ -106,18 +106,24 @@ public class RemoteControlActivity extends AppCompatActivity {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             //super.onConnectionStateChange(gatt, status, newState);
-            replyingRobot = gatt.getDevice();
+            robot = gatt.getDevice();
             switch(newState ){
                 case BluetoothProfile.STATE_CONNECTED:
-                    Snackbar.make(findViewById(android.R.id.content), "Connected to " + replyingRobot.getName(), Snackbar.LENGTH_LONG).setAction("No action", null).show();
+                    Snackbar.make(findViewById(android.R.id.content), "Connected to " + robot.getName(), Snackbar.LENGTH_LONG).setAction("No action", null).show();
                     //Toast.makeText(getApplicationContext(), "Connected to " + connectedDevice.getName(), Toast.LENGTH_LONG).show();
-                    titleTextView.setText("Connected to " + replyingRobot.getName());
+                    titleTextView.setText("Connected to " + robot.getName());
+                    titleTextView.setTextColor(getResources().getColor(R.color.dark_green));
+                    connection = true;
                     bluetoothGatt.discoverServices();
                     break;
 
                 case BluetoothProfile.STATE_DISCONNECTED:
-                    Snackbar.make(findViewById(android.R.id.content), "Disconnected from " + replyingRobot.getName(), Snackbar.LENGTH_LONG).setAction("No action", null).show();
-                    //Toast.makeText(getApplicationContext(), "Disconnected from " + connectedDevice.getName(), Toast.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(android.R.id.content), "Disconnected from " + robot.getName(), Snackbar.LENGTH_LONG).setAction("No action", null).show();
+                    titleTextView.setText("Robot Disconnected");
+                    titleTextView.setTextColor(getResources().getColor(R.color.red));
+                    connection = false;
+                    //Try to reconnect
+                    robot.connectGatt(getActivity(), true, gattCallback);
                     break;
 
                 default:

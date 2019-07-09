@@ -226,7 +226,6 @@ public class MainActivity extends AppCompatActivity {
 
                 case BluetoothProfile.STATE_DISCONNECTED:
                     Snackbar.make(findViewById(android.R.id.content), "Disconnected from " + connectedDevice.getName(), Snackbar.LENGTH_LONG).setAction("No action", null).show();
-                    //Toast.makeText(getApplicationContext(), "Disconnected from " + connectedDevice.getName(), Toast.LENGTH_LONG).show();
                     break;
 
                     default:
