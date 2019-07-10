@@ -23,6 +23,24 @@ import java.util.UUID;
 
 public class RemoteControlActivity extends AppCompatActivity {
 
+    //Constants
+
+    static final String IDLE_COMMAND = "@M00";
+    static final String IDLE_TEXT = "IDLE";
+
+    static final String FORWARD_COMMAND = "@MF0";
+    static final String FORWARD_TEXT = "FORWARD";
+
+    static final String REVERSE_COMMAND = "@MB0";
+    static final String REVERSE_TEXT = "REVERSE";
+
+    static final String RIGHT_COMMAND = "@MR0";
+    static final String RIGHT_TEXT = "RIGHT";
+
+    static final String LEFT_COMMAND = "@ML0";
+    static final String LEFT_TEXT = "LEFT";
+
+
     ImageButton forwardButton;
     ImageButton reverseButton;
     ImageButton rightButton;
@@ -96,6 +114,10 @@ public class RemoteControlActivity extends AppCompatActivity {
         prevState = MovingState.Idle;
     }
 
+
+
+
+
     private RemoteControlActivity getActivity() {
 
         return this;
@@ -122,8 +144,16 @@ public class RemoteControlActivity extends AppCompatActivity {
                     Snackbar.make(findViewById(android.R.id.content), "Disconnected from " + robotName, Snackbar.LENGTH_LONG).setAction("No action", null).show();
                     titleTextView.setText("Robot Disconnected");
                     connection = false;
+
+                    //Close current Gatt
+                    if (bluetoothGatt == null) {
+                        return;
+                    }
+                    bluetoothGatt.close();
+                    bluetoothGatt = null;
+
                     //Try to reconnect
-                    robot.connectGatt(getActivity(), true, gattCallback);
+                    bluetoothGatt = robot.connectGatt(getActivity(), true, gattCallback);
                     break;
 
                 default:
@@ -206,8 +236,8 @@ public class RemoteControlActivity extends AppCompatActivity {
                         forwardButton.animate().scaleY(1.1f);
                         forwardButton.setColorFilter(Color.argb(100, 0,255,0));
                         //Toast.makeText(getApplicationContext(), "Button FORWARD down", Toast.LENGTH_LONG).show();
-                        controlTextView.setText("FORWARD");
-                        customCharacteristic.setValue("@MF0");
+                        controlTextView.setText(FORWARD_TEXT);
+                        customCharacteristic.setValue(FORWARD_COMMAND);
                         bluetoothGatt.writeCharacteristic(customCharacteristic);
                         prevState = MovingState.Forward;
                         break;
@@ -218,8 +248,8 @@ public class RemoteControlActivity extends AppCompatActivity {
                         forwardButton.animate().scaleY(1);
                         //forwardButton.clearAnimation();
                         forwardButton.setColorFilter(Color.alpha(0));
-                        controlTextView.setText("IDLE");
-                        customCharacteristic.setValue("@M00");
+                        controlTextView.setText(IDLE_TEXT);
+                        customCharacteristic.setValue(IDLE_COMMAND);
                         bluetoothGatt.writeCharacteristic(customCharacteristic);
                         prevState = MovingState.Idle;
                         break;
@@ -245,8 +275,8 @@ public class RemoteControlActivity extends AppCompatActivity {
                         reverseButton.animate().scaleY(1.1f);
                         reverseButton.setColorFilter(Color.argb(100, 0,255,0));
                         //Toast.makeText(getApplicationContext(), "Button REVERSE down", Toast.LENGTH_LONG).show();
-                        controlTextView.setText("REVERSE");
-                        customCharacteristic.setValue("@MB0");
+                        controlTextView.setText(REVERSE_TEXT);
+                        customCharacteristic.setValue(REVERSE_COMMAND);
                         bluetoothGatt.writeCharacteristic(customCharacteristic);
                         prevState = MovingState.Reverse;
                         break;
@@ -256,8 +286,8 @@ public class RemoteControlActivity extends AppCompatActivity {
                         reverseButton.animate().scaleY(1);
                         reverseButton.setColorFilter(Color.alpha(0));
                         //Toast.makeText(getApplicationContext(), "Button REVERSE up", Toast.LENGTH_LONG).show();
-                        controlTextView.setText("IDLE");
-                        customCharacteristic.setValue("@M00");
+                        controlTextView.setText(IDLE_TEXT);
+                        customCharacteristic.setValue(IDLE_COMMAND);
                         bluetoothGatt.writeCharacteristic(customCharacteristic);
                         prevState = MovingState.Idle;
                         break;
@@ -283,8 +313,8 @@ public class RemoteControlActivity extends AppCompatActivity {
                         rightButton.animate().scaleY(1.1f);
                         rightButton.setColorFilter(Color.argb(100, 0,255,0));
                         //Toast.makeText(getApplicationContext(), "Button RIGHT down", Toast.LENGTH_LONG).show();
-                        controlTextView.setText("RIGHT");
-                        customCharacteristic.setValue("@MR0");
+                        controlTextView.setText(RIGHT_TEXT);
+                        customCharacteristic.setValue(RIGHT_COMMAND);
                         bluetoothGatt.writeCharacteristic(customCharacteristic);
                         break;
 
@@ -320,8 +350,8 @@ public class RemoteControlActivity extends AppCompatActivity {
                         leftButton.animate().scaleY(1.1f);
                         leftButton.setColorFilter(Color.argb(100, 0,255,0));
                         //Toast.makeText(getApplicationContext(), "Button LEFT down", Toast.LENGTH_LONG).show();
-                        controlTextView.setText("LEFT");
-                        customCharacteristic.setValue("@ML0");
+                        controlTextView.setText(LEFT_TEXT);
+                        customCharacteristic.setValue(LEFT_COMMAND);
                         bluetoothGatt.writeCharacteristic(customCharacteristic);
                         break;
 
@@ -351,21 +381,21 @@ public class RemoteControlActivity extends AppCompatActivity {
         switch(prevState){
 
             case Idle:
-                customCharacteristic.setValue("@M00");
+                customCharacteristic.setValue(IDLE_COMMAND);
                 bluetoothGatt.writeCharacteristic(customCharacteristic);
-                controlTextView.setText("IDLE");
+                controlTextView.setText(IDLE_TEXT);
                 break;
 
             case Forward:
-                customCharacteristic.setValue("@MF0");
+                customCharacteristic.setValue(FORWARD_COMMAND);
                 bluetoothGatt.writeCharacteristic(customCharacteristic);
-                controlTextView.setText("FORWARD");
+                controlTextView.setText(FORWARD_TEXT);
                 break;
 
             case Reverse:
-                customCharacteristic.setValue("@MB0");
+                customCharacteristic.setValue(REVERSE_COMMAND);
                 bluetoothGatt.writeCharacteristic(customCharacteristic);
-                controlTextView.setText("REVERSE");
+                controlTextView.setText(REVERSE_TEXT);
 
 //            case Left:
 //                customCharacteristic.setValue("@ML0");

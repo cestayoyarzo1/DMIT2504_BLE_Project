@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/activity_remote_control_title_textview"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="30dp"
@@ -18,6 +18,7 @@
         android:text="@string/activity_remote_control_title"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/activity_remote_control_forward_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,7 +93,7 @@
 
     <TextView
         android:id="@+id/activity_remote_control_control_textview"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
