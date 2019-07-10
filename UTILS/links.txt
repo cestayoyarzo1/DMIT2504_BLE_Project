@@ -1,0 +1,5 @@
+https://stackoverflow.com/questions/37181843/android-using-bluetoothgattserver
+
+https://github.com/androidthings/sample-bluetooth-le-gattserver
+
+
