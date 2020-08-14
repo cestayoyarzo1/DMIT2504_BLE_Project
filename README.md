@@ -9,4 +9,4 @@ A 4 wheel robot controlled via BLE using android App. Project Includes:
 
 - ![Project Presentation](/UTILS/Presentation.pdf)
 - ![Embedded Project (C)](/EmbeddedProjectC/)
-- ![Android Project (java)](/FinalProject/)
+- ![Android Project (Java)](/FinalProject/)
