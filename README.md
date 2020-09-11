@@ -8,5 +8,5 @@ IAR Embedded Workbench Project for the firmware needed for the NUCLEO-L476RG boa
 - ![Android Project (Java)](/FinalProject/)
 Full app for android
 
--![Video](https://www.youtube.com/watch?v=EImDyGrUCVg&t=7s)
+-[Video](https://www.youtube.com/watch?v=EImDyGrUCVg&t=7s)
 Demonstration
